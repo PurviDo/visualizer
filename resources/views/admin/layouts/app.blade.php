@@ -16,7 +16,7 @@
   <!-- iCheck -->
   <link rel="stylesheet" href="{{ asset('/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
   <!-- JQVMap -->
-  <link rel="stylesheet" href="{{ asset('/adminlte/plugins/jqvmap/jqvmap.min.css')}}">
+  <!-- <link rel="stylesheet" href="{{ asset('/adminlte/plugins/jqvmap/jqvmap.min.css')}}"> -->
   <!-- T')heme style -->
   <link rel="stylesheet" href="{{ asset('/adminlte/dist/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
@@ -26,41 +26,14 @@
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('/adminlte/plugins/summernote/summernote-bs4.min.css')}}">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
 
-  <!-- Preloader -->
-  <!-- <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="admin/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div> -->
+<!-- header.blade.php -->
+@include('admin.layouts.header')
 
-  <!-- Navbar -->
-    @include('admin.layouts.nav-top')
-  <!-- /.navbar -->
+@yield('content')  
 
-  <!-- Main Sidebar Container -->
-  @include('admin.layouts.side-nav')
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    @yield('content')
-  </div>
-  <!-- /.content-wrapper -->
-  <!-- <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
-    </div>
-  </footer> -->
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
+<!-- footer.blade.php -->
+@include('admin.layouts.footer')
 
 <!-- jQuery -->
 <script src="{{ asset('/adminlte/plugins/jquery/jquery.min.js')}}"></script>
@@ -77,8 +50,8 @@
 <!-- Sparkline -->
 <script src="{{ asset('/adminlte/plugins/sparklines/sparkline')}}.js"></script>
 <!-- JQVMap -->
-<script src="{{ asset('/adminlte/plugins/jqvmap/jquery.vmap.m')}}in.js"></script>
-<script src="{{ asset('/adminlte/plugins/jqvmap/maps/jquery.v')}}map.usa.js"></script>
+<!-- <script src="{{ asset('/adminlte/plugins/jqvmap/jquery.vmap.m')}}in.js"></script>
+<script src="{{ asset('/adminlte/plugins/jqvmap/maps/jquery.v')}}map.usa.js"></script> -->
 <!-- jQuery Knob Chart -->
 <script src="{{ asset('/adminlte/plugins/jquery-knob/jquery.k')}}nob.min.js"></script>
 <!-- daterangepicker -->
@@ -93,8 +66,8 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('/adminlte/dist/js/adminlte.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ asset('/adminlte/dist/js/demo.js')}}"></script>
+<!-- <script src="{{ asset('/adminlte/dist/js/demo.js')}}"></script> -->
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('/adminlte/dist/js/pages/dashboard.js')}}"></script>
+<!-- <script src="{{ asset('/adminlte/dist/js/pages/dashboard.js')}}"></script> -->
 </body>
 </html>

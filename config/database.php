@@ -34,7 +34,7 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'dsn' => env('DB_URI','mongodb://localhost:27017/'),
-            'database' => 'test',
+            'database' => env('DB_DATABASE', 'laravel'),
         ],
 
         'sqlite' => [
