@@ -153,7 +153,7 @@
             id = $(this).data('id');
             name = $(this).data('name');
             modalShow('.category-modal');
-            $('.modal-title').html("Edit product type");
+            $('.modal-title').html("Edit Category");
             $('.category-id').val(id);
             $('.name').val(name);
         });
@@ -162,9 +162,9 @@
             var message;
             url = $(this).data('action');
             if ($(this).hasClass('delete-category')) {
-                message = "Do you want to delete this product type ?";
+                message = "Do you want to delete this Category ?";
             } else if ($(this).hasClass('restore-category')) {
-                message = "Do You want to restore this product type ?";
+                message = "Do You want to restore this Category ?";
             }
             Swal.fire({
                     title: message,
