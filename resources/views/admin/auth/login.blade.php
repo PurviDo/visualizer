@@ -3,10 +3,13 @@
 
 <body class="hold-transition login-page">
     <div class="login-box">
+        <div class="login-logo">
+            <img src="{{ asset('/assets/images/logo/logo.png')}}" alt="Visualizer" class="brand-image" style="opacity: .8" width="150">
+        </div>
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-            <a href="{{ url('/') }}" class="h1"><b>Visualizer</b> Admin</a>
+            <a href="{{ url('/') }}" class="h1"><b>Visualizer</b> Admin Panel</a>
             </div>
             <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>

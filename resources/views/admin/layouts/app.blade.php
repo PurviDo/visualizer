@@ -25,6 +25,8 @@
   <link rel="stylesheet" href="{{ asset('/adminlte/plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('/adminlte/plugins/summernote/summernote-bs4.min.css')}}">
+  <!-- custom css -->
+  <link rel="stylesheet" href="{{ asset('/assets/css/visualizer.css')}}">
 </head>
 
 <!-- header.blade.php -->
