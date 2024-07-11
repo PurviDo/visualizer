@@ -22,7 +22,7 @@ class SubCategoryController extends Controller
             return DataTables::of($subCategory)
                 ->addIndexColumn()
                 ->editColumn('action', function ($row) {
-                    $btn = '<button class="btn btn-sm btn-info btn-round tooltip-toggle edit-sub-category" data-id="' . $row->id . '" data-name="' . $row->name . '" data-category_id="' . $row->Category['id'] . '" data-category_name="' . $row->Category['name'] . '"  data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
+                    $btn = '<button class="btn btn-sm btn-info btn-round tooltip-toggle edit-sub-category" data-action="' . route('sub-category.show', $row->id) . '" data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
                     $btn .= ' <button class="btn btn-sm btn-danger btn-round tooltip-toggle delete-sub-category" data-original-title="Delete" data-action="' . route('sub-category.destroy', $row->id) . '"><i class="nav-icon fas fa-trash"></i></button>';
                     return $btn;
                 })
@@ -31,6 +31,18 @@ class SubCategoryController extends Controller
         }
         $categories = Category::where('is_deleted', false)->where('parent_id', null)->get();
         return view('admin.subCategory.index', compact('categories'));
+    }
+
+    public function show($id)
+    {
+        $subCategory = Category::query()
+            ->findOrFail($id);
+        $subCategory->user_input_label = json_decode($subCategory->user_input_label) ?? [];
+        return response()->json([
+            'success' => true,
+            'message' => "",
+            'data' => $subCategory,
+        ]);
     }
 
     public function store(Request $request)
@@ -43,7 +55,10 @@ class SubCategoryController extends Controller
                 'max:255',
                 Rule::unique('categories')->ignore($id, '_id'),
             ],
-            'category_id' => ['required']
+            'category_id' => ['required'],
+            'no_of_user_input' => ['required', 'integer', 'min:1'],
+            'user_input_label' => ['required', 'array', 'min:1'],
+            'user_input_label.*' => 'required|string|max:255',
         ];
 
         if ($id != 0) {
@@ -66,6 +81,8 @@ class SubCategoryController extends Controller
 
         $subCategory->name = $request->name;
         $subCategory->parent_id = $request->category_id;
+        $subCategory->no_of_user_input = $request->no_of_user_input;
+        $subCategory->user_input_label = json_encode($request->user_input_label);
         $subCategory->is_deleted = false;
 
         $subCategory->save();

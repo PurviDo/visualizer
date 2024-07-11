@@ -25,7 +25,7 @@
           <li class="nav-item menu-open">
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{route('dashboard.index')}}" class="nav-link {{ Route::is('dashboard') ? 'active' : '' }}">
+                <a href="{{route('dashboard')}}" class="nav-link {{ Route::is('dashboard') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>
                     Dashboard
@@ -33,7 +33,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{route('customers.index')}}" class="nav-link {{ Route::is('customers') ? 'active' : '' }}">
+                <a href="{{route('customers')}}" class="nav-link {{ Route::is('customers') ? 'active' : '' }}">
                 <a href="/customers" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
                   <p>
