@@ -23,7 +23,7 @@ class CategoryController extends Controller
             return DataTables::of($category)
                 ->addIndexColumn()
                 ->editColumn('action', function ($row) {
-                    $btn = '<button class="btn btn-sm btn-info btn-round tooltip-toggle edit-category" data-id="' . $row->id . '" data-name="' . $row->name . '"  data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
+                    $btn = '<button class="btn btn-sm btn-warning btn-round tooltip-toggle edit-category" data-id="' . $row->id . '" data-name="' . $row->name . '"  data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
                     $btn .= ' <button class="btn btn-sm btn-danger btn-round tooltip-toggle delete-category" data-original-title="Delete" data-action="' . route('category.destroy', $row->id) . '"><i class="nav-icon fas fa-trash"></i></button>';
                     return $btn;
                 })

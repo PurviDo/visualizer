@@ -2,6 +2,7 @@
 @section('style')
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/sweetalert2/sweetalert2.min.css') }}">
 @endsection
 @section('content')
     <div class="content-header">
@@ -80,10 +81,10 @@
 
                             <fieldset class="form-group text-right mb-0">
                                 <button type="reset" class="btn" data-dismiss="modal">
-                                    Close
+                                    Cancel
                                 </button>
                                 <button type="submit" class="btn btn-primary">
-                                    Submit
+                                    Save
                                 </button>
                             </fieldset>
                         </div>
@@ -101,7 +102,7 @@
     <script src="{{ asset('adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script>
         $(document).ready(function() {
 
@@ -167,6 +168,7 @@
             }
             Swal.fire({
                     title: message,
+                    icon: "warning",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes',

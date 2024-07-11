@@ -2,6 +2,7 @@
 @section('style')
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/sweetalert2/sweetalert2.min.css') }}">
 @endsection
 @section('content')
     <div class="content-header">
@@ -73,20 +74,21 @@
                         <input type="hidden" name="id" value="0" class="id">
                         <div class="modal-body">
                             <fieldset class="form-group floating-label-form-group">
-                                <label for="email">Name <span class="text-danger">*</span></label>
-                                <input type="text" name="name" class="form-control name" placeholder="Enter name"
-                                    required>
-                                <div class="invalid-feedback font-weight-bold name-invalid" role="alert"></div>
-                            </fieldset>
-                            <fieldset class="form-group floating-label-form-group">
                                 <label for="category_id">Category Name <span class="text-danger">*</span></label>
                                 <select name="category_id" class="form-control category_id" required>
-                                    <option value="">Select Category</option>
+                                    <option selected value="">Select Category</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category['_id'] }}">{{ $category['name'] }}</option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback font-weight-bold category_id-invalid" role="alert"></div>
+                            </fieldset>
+
+                            <fieldset class="form-group floating-label-form-group">
+                                <label for="email">Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control name" placeholder="Enter name"
+                                    required>
+                                <div class="invalid-feedback font-weight-bold name-invalid" role="alert"></div>
                             </fieldset>
 
                             <fieldset class="form-group floating-label-form-group">
@@ -106,10 +108,10 @@
 
                             <fieldset class="form-group text-right mb-0">
                                 <button type="reset" class="btn" data-dismiss="modal">
-                                    Close
+                                    Cancel
                                 </button>
                                 <button type="submit" class="btn btn-primary">
-                                    Submit
+                                    Save
                                 </button>
                             </fieldset>
                         </div>
@@ -127,7 +129,7 @@
     <script src="{{ asset('adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('input[name="no_of_user_input"]').on('input', function() {
@@ -137,9 +139,9 @@
                     $('#user-inputs-container').empty();
 
                     for (var i = 1; i <= numberOfInputs; i++) {
-                        var label = 'Input ' + i;
+                        var label = 'Label ' + i;
                         var inputHtml =
-                            '<input type="text" name="user_input_label[]" class="form-control user_input_label" placeholder="' +
+                            '<input type="text" name="user_input_label[]" class="form-control user_input_label mb-2" placeholder="' +
                             label + '">';
                         $('#user-inputs-container').append(inputHtml);
                     }
@@ -193,7 +195,7 @@
         $(document).on('click', '.add-sub-category', function() {
             $('#user-inputs-container').empty();
             modalShow('.sub-category-modal');
-            $('.modal-title').html("Add Category");
+            $('.modal-title').html("Add Sub Category");
         });
 
         $(document).on('click', '.edit-sub-category', function() {
@@ -206,7 +208,7 @@
                     if (response.success) {
 
                         modalShow('.sub-category-modal');
-                        $('.modal-title').html("Edit Category");
+                        $('.modal-title').html("Edit Sub Category");
 
                         var subCategory = response.data;
                         id = subCategory._id;
@@ -225,7 +227,7 @@
                             for (var i = 1; i <= subCategory.no_of_user_input; i++) {
 
                                 var inputHtml =
-                                    '<input type="text" name="user_input_label[]" class="form-control user_input_label" value="' +
+                                    '<input type="text" name="user_input_label[]" class="form-control user_input_label mb-2" value="' +
                                     (subCategory.user_input_label[i - 1] ?
                                         subCategory.user_input_label[i - 1] : '') + '">';
                                 $('#user-inputs-container').append(inputHtml);
@@ -245,13 +247,14 @@
         $(document).on('click', '.delete-sub-category,.restore-sub-category', function() {
             var message;
             url = $(this).data('action');
-            if ($(this).hasClass('delete-category')) {
-                message = "Do you want to delete this Category ?";
+            if ($(this).hasClass('delete-sub-category')) {
+                message = "Do you want to delete this Sub Category ?";
             } else if ($(this).hasClass('restore-category')) {
-                message = "Do You want to restore this Category ?";
+                message = "Do You want to restore this Sub Category ?";
             }
             Swal.fire({
                     title: message,
+                    icon: 'warning',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes',

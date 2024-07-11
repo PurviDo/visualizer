@@ -32,9 +32,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/customers/save', [CustomerController::class, 'save'])->name('customer.save');
     Route::get('/customers/edit', [CustomerController::class, 'edit']);
 
-    // Sub Catgories
-    Route::get('/sub_catgories', [DashboardController::class, 'index'])->name('dashboard');
-
     // Packages
     Route::get('/packages', [DashboardController::class, 'index'])->name('dashboard');
 
