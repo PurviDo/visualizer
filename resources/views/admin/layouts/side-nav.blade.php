@@ -42,7 +42,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{route('category.index')}}" class="nav-link {{ Route::is('category.index') ? 'active' : '' }}">
+                <a href="{{route('dashboard')}}" class="nav-link {{ Route::is('category.index') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                     Catgories
