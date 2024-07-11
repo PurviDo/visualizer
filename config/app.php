@@ -123,4 +123,11 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    * Laravel Framework Service Providers...
+    */
+    // 'providers' => [
+    //     MongoDB\Laravel\MongoDBServiceProvider::class,
+    // ],
+
 ];

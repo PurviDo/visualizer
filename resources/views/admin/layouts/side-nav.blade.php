@@ -25,7 +25,7 @@
           <li class="nav-item menu-open">
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/dashboard" class="nav-link active">
+                <a href="/dashboard" class="nav-link">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>
                     Dashboard
@@ -33,7 +33,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/users" class="nav-link">
+                <a href="/customers" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
                   <p>
                     Users
