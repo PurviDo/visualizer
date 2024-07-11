@@ -15,7 +15,11 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $category = Category::where('is_deleted', false)->get();
+            $category = Category::query()
+                ->with('subCategories')
+                ->where('is_deleted', false)
+                ->where('parent_id', null)
+                ->get();
             return DataTables::of($category)
                 ->addIndexColumn()
                 ->editColumn('action', function ($row) {
