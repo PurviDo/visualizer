@@ -9,21 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+
+    public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->tinyInteger('is_deleted')->default(0)->comment('0 = Inactive 1 = active');
-            $table->timestamps();
+        Schema::connection('mongodb')->create('categories', function (Blueprint $collection) {
+            $collection->index('name');
+            $collection->index('parent_id');
+            $collection->boolean('is_deleted')->default(false);
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::connection('mongodb')->drop('categories');
     }
 };

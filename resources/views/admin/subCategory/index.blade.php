@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Category</h1>
+                    <h1 class="m-0">Sub Category</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Category</li>
+                        <li class="breadcrumb-item active">Sub Category</li>
                     </ol>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-end align-items-center">
-                            <button type="button" class="btn btn-info add-category">Add New</button>
+                            <button type="button" class="btn btn-info add-sub-category">Add New</button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -34,6 +34,7 @@
                                         <tr>
                                             <th>Index</th>
                                             <th>Name</th>
+                                            <th>Category Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -47,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade text-left drawer-right category-modal" id="bootstrap" tabindex="-1" role="dialog"
+        <div class="modal fade text-left drawer-right sub-category-modal" id="bootstrap" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel35" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -68,8 +69,8 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="category-form" action="{{ route('category.store') }}">
-                        <input type="hidden" name="id" value="0" class="category-id">
+                    <form id="sub-category-form" action="{{ route('sub-category.store') }}">
+                        <input type="hidden" name="id" value="0" class="id">
                         <div class="modal-body">
                             <fieldset class="form-group floating-label-form-group">
                                 <label for="email">Name <span class="text-danger">*</span></label>
@@ -77,6 +78,17 @@
                                     required>
                                 <div class="invalid-feedback font-weight-bold name-invalid" role="alert"></div>
                             </fieldset>
+                            <fieldset class="form-group floating-label-form-group">
+                                <label for="category_id">Category Name <span class="text-danger">*</span></label>
+                                <select name="category_id" class="form-control category-id" required>
+                                    <option value="">Select Category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category['_id'] }}">{{ $category['name'] }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback font-weight-bold category-id-invalid" role="alert"></div>
+                            </fieldset>
+                            
 
                             <fieldset class="form-group text-right mb-0">
                                 <button type="reset" class="btn" data-dismiss="modal">
@@ -106,9 +118,9 @@
         $(document).ready(function() {
 
             $.ajaxSetup({
-            	headers: {
-            		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            	}
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
 
             $('#data-table').DataTable({
@@ -120,7 +132,7 @@
                     sSearch: '',
                 },
                 ajax: {
-                    url: "{{ route('category.index') }}",
+                    url: "{{ route('sub-category.index') }}",
                     type: 'GET'
                 },
                 columns: [{
@@ -128,9 +140,14 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
-                    }, {
+                    },
+                    {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'category.name',
+                        name: 'category.name'
                     },
                     {
                         data: 'action',
@@ -142,22 +159,26 @@
             });
         });
 
-        $(document).on('click', '.add-category', function() {
-            modalShow('.category-modal');
+        $(document).on('click', '.add-sub-category', function() {
+            modalShow('.sub-category-modal');
             $('.modal-title').html("Add Category");
         });
 
-        $(document).on('click', '.edit-category', function() {
-            var id, title;
+        $(document).on('click', '.edit-sub-category', function() {
+            var id, title, category_id, category_name;
             id = $(this).data('id');
             name = $(this).data('name');
-            modalShow('.category-modal');
+            category_id = $(this).data('category_id');
+            category_name = $(this).data('category_name');
+            modalShow('.sub-category-modal');
             $('.modal-title').html("Edit Category");
-            $('.category-id').val(id);
+            $('.id').val(id);
             $('.name').val(name);
+            $('.category_id').val(category_id);
+            $('.category_name').val(category_name);
         });
 
-        $(document).on('click', '.delete-category,.restore-category', function() {
+        $(document).on('click', '.delete-sub-category,.restore-sub-category', function() {
             var message;
             url = $(this).data('action');
             if ($(this).hasClass('delete-category')) {
@@ -184,21 +205,22 @@
                             method: "DELETE",
                             success: function(response) {
                                 refresh_datatable();
-                                toastr.success(response.message);
                             }
                         });
                     }
                 });
         });
 
-        $(document).on('submit', '#category-form', function(e) {
+        $(document).on('submit', '#sub-category-form', function(e) {
             e.preventDefault();
-            var url, name, nameInvalid, modal, form;
+            var url, name, nameInvalid,categoryId, categoryIdInvalid, modal, form;
             url = $(this).attr('action');
             name = $('.name');
             nameInvalid = $('.name-invalid');
-            modal = $('.category-modal');
-            form = $('#category-form');
+            categoryId = $('.category-id');
+            categoryIdInvalid = $('.category-id-invalid');
+            modal = $('.sub-category-modal');
+            form = $('#sub-category-form');
             $('.category-loading').addClass('show');
             $.ajax({
                 // headers: {
@@ -217,11 +239,14 @@
                         modalHide(modal);
                         refresh_datatable();
                         $(form)[0].reset();
-                        // toastr.success(response.message);
                     } else {
                         if (response.data.name) {
                             name.addClass('is-invalid');
                             nameInvalid.html(response.data.name[0]);
+                        }
+                        if (response.data.category_id) {
+                            categoryIdInval.addClass('is-invalid');
+                            categoryIdInvalid.html(response.data.category_id[0]);
                         }
                     }
                 },
@@ -231,8 +256,8 @@
         function modalShow(modalName) {
             $('.form-control').removeClass('is-invalid');
             $('.invalid-feedback').html('');
-            $('#category-form')[0].reset();
-            $('.category-id').val(0);
+            $('#sub-category-form')[0].reset();
+            $('.category_id').val(0);
             $(modalName).modal('show');
         }
 

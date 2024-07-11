@@ -50,7 +50,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/sub_catgories" class="nav-link">
+                <a href="{{route('sub-category.index')}}" class="nav-link {{ Route::is('sub-category.index') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                     Sub Catgories

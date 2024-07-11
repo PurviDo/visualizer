@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\SubCategoryController;
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
 Route::get('/login', function () {
@@ -36,5 +37,6 @@ Route::get('/cms_mg', [DashboardController::class, 'index'])->name('dashboard');
 
 //CATEGORY
 Route::resource('category', CategoryController::class);
+Route::resource('sub-category', SubCategoryController::class);
 
 // });
