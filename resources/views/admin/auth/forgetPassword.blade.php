@@ -28,8 +28,8 @@
           <!-- /.col -->
         </div>
       </form>
-      <p class="mt-3 mb-1">
-        <a href="/">Login</a>
+      <p class="mt-3 mb-1 text-center">
+        <a href="{{ url('/') }}">Login</a>
       </p>
     </div>
 @endsection
