@@ -1,31 +1,18 @@
 @extends('admin.auth.layouts.app')
 @section('content')
-
-  <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">You are only one step a way from your new password, recover your password now.</p>
 
-      <form action="{{ route('login.post') }}" method="POST">
+      <form action="{{route('reset.password.post')}}" method="post">
         @csrf
-
-        @session('message')
+        <input type="hidden" name="token" value="{{ $token }}">
+        @session('error')
             <div class="alert alert-danger" role="alert"> 
                 {{ $value }}
             </div>
         @endsession
-        <div class="input-group mb-1">
-          <input name="email" type="email" class="form-control" placeholder="Email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        @error('email')
-        <div class="text-danger">{{ $message }}</div>
-        @enderror
-        <div class="input-group mb-1">
+        <div class="input-group mb-3">
           <input name="password" type="password" class="form-control" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
@@ -36,19 +23,27 @@
         @error('password')
         <div class="text-danger">{{ $message }}</div>
         @enderror
-        <div class="row">
-          <!-- /.col -->
-          <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        <div class="input-group mb-3">
+          <input name="password_confirmation" type="password" class="form-control" placeholder="Confirm Password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
           </div>
-          <!-- /.col -->
+        </div>
+         @error('password_confirmation')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+        <div class="row">
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block">Change password</button>
+          </div>
         </div>
       </form>
 
-      <p class="mb-1">
-        <a href="{{ route('forget.password.get') }}">I forgot my password</a>
+      <p class="mt-3 mb-1">
+        <a href="/">Login</a>
       </p>
     </div>
-    <!-- /.login-card-body -->
   </div>
 @endsection
