@@ -1,9 +1,5 @@
 @extends('admin.layouts.app')
-@section('style')
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/sweetalert2/sweetalert2.min.css') }}">
-@endsection
+
 @section('content')
     <div class="content-header">
         <div class="container-fluid">
@@ -26,15 +22,15 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-end align-items-center">
-                            <button type="button" class="btn btn-info add-category">Add New</button>
+                            <button type="button" class="btn btn-info add-category">Add New Category</button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="data-table" class="table table-bordered table-striped" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>Index</th>
-                                            <th>Name</th>
+                                            <th>Sr.no</th>
+                                            <th>Category Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -73,8 +69,8 @@
                         <input type="hidden" name="id" value="0" class="category-id">
                         <div class="modal-body">
                             <fieldset class="form-group floating-label-form-group">
-                                <label for="email">Name <span class="text-danger">*</span></label>
-                                <input type="text" name="name" class="form-control name" placeholder="Enter name"
+                                <label for="email">Category Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control name" placeholder="Enter category name"
                                     required>
                                 <div class="invalid-feedback font-weight-bold name-invalid" role="alert"></div>
                             </fieldset>
@@ -95,14 +91,7 @@
     </section>
 @endsection
 @section('script')
-    <script src="{{ asset('/adminlte/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    
     <script>
         $(document).ready(function() {
 
@@ -162,9 +151,9 @@
             var message;
             url = $(this).data('action');
             if ($(this).hasClass('delete-category')) {
-                message = "Do you want to delete this Category ?";
+                message = "Are you sure, you want to delete this Category ?";
             } else if ($(this).hasClass('restore-category')) {
-                message = "Do You want to restore this Category ?";
+                message = "Are you sure, you want to restore this Category ?";
             }
             Swal.fire({
                     title: message,
@@ -203,11 +192,6 @@
             form = $('#category-form');
             $('.category-loading').addClass('show');
             $.ajax({
-                // headers: {
-                //     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                //         "content"
-                //     ),
-                // },
                 url: url,
                 type: "POST",
                 dataType: 'json',

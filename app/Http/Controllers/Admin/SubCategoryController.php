@@ -22,7 +22,7 @@ class SubCategoryController extends Controller
             return DataTables::of($subCategory)
                 ->addIndexColumn()
                 ->editColumn('action', function ($row) {
-                    $btn = '<button class="btn btn-sm btn-info btn-round tooltip-toggle edit-sub-category" data-action="' . route('sub-category.show', $row->id) . '" data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
+                    $btn = '<button class="btn btn-sm btn-warning btn-round tooltip-toggle edit-sub-category" data-action="' . route('sub-category.show', $row->id) . '" data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
                     $btn .= ' <button class="btn btn-sm btn-danger btn-round tooltip-toggle delete-sub-category" data-original-title="Delete" data-action="' . route('sub-category.destroy', $row->id) . '"><i class="nav-icon fas fa-trash"></i></button>';
                     return $btn;
                 })
