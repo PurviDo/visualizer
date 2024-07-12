@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\SubCategoryController;
 
 Route::middleware('guest')->group(function () {
@@ -39,9 +40,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/customers/save', [CustomerController::class, 'save'])->name('customer.save');
     Route::get('/customers/edit', [CustomerController::class, 'edit']);
 
-    // Packages
-    Route::get('/packages', [DashboardController::class, 'index'])->name('dashboard');
-
     // Template Management
     Route::get('/template_mg', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -51,4 +49,7 @@ Route::middleware('auth')->group(function () {
     //CATEGORY
     Route::resource('category', CategoryController::class);
     Route::resource('sub-category', SubCategoryController::class);
+
+    //PACKAGE 
+    Route::resource('packages', PackageController::class);
 });
