@@ -47,7 +47,7 @@ class PackageController extends Controller
             'description' => 'required|string',
             'credits' => 'required|integer|min:0',
             'actual_price' => 'required|numeric|min:0',
-            'discounted_price' => 'required|numeric|min:0|lt:actual_price',
+            'discounted_price' => 'nullable|numeric|min:0|lt:actual_price',
             'status' => 'required|in:Active,Inactive',
         ];
 

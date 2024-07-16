@@ -33,7 +33,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{route('customers')}}" class="nav-link {{ Route::is('customers') ? 'active' : '' }}">
+                <a href="{{route('customers.index')}}" class="nav-link {{ Route::is('customers') ? 'active' : '' }}">
                 <a href="/customers" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
                   <p>

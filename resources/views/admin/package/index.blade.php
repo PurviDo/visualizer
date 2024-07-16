@@ -111,9 +111,9 @@
                             </fieldset>
 
                             <fieldset class="form-group floating-label-form-group">
-                                <label for="discounted_price">Discounted Price <span class="text-danger">*</span></label>
+                                <label for="discounted_price">Discounted Price</label>
                                 <input type="digit" name="discounted_price" class="form-control discounted_price"
-                                    placeholder="Enter Discounted Price" required>
+                                    placeholder="Enter Discounted Price">
                                 <div class="invalid-feedback font-weight-bold discounted_price-invalid" role="alert">
                                 </div>
                             </fieldset>
