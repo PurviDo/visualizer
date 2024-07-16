@@ -428,7 +428,7 @@
             $('.form-control').removeClass('is-invalid');
             $('.invalid-feedback').html('');
             $('#package-form')[0].reset();
-            $('.category_id').val(0);
+            $('.id').val(0);
             $(modalName).modal('show');
         }
 

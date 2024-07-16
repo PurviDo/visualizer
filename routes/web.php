@@ -35,10 +35,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Users
-    Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
-    Route::get('/customers/create', [CustomerController::class, 'create']);
-    Route::post('/customers/save', [CustomerController::class, 'save'])->name('customer.save');
-    Route::get('/customers/edit', [CustomerController::class, 'edit']);
+    Route::resource('customers', CustomerController::class);
+
+    // Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
+    // Route::get('/customers/create', [CustomerController::class, 'create']);
+    // Route::post('/customers/save', [CustomerController::class, 'save'])->name('customer.store');
+    // Route::get('/customers/edit', [CustomerController::class, 'edit']);
 
     // Template Management
     Route::get('/template_mg', [DashboardController::class, 'index'])->name('dashboard');

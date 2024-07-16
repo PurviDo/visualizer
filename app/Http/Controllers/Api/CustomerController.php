@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Customers;
+use App\Models\Customer;
 use App\Helpers\Helper;
 use App\Services\CustomerServices;
 

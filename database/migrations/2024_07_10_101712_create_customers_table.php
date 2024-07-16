@@ -9,24 +9,27 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
-            $table->id();
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->string('mobileno', 15);
-            $table->integer('credits');
-            $table->boolean('is_deleted')->default(0);
-            $table->timestamps();
+        Schema::connection('mongodb')->create('users', function (Blueprint $collection) {
+            $collection->string('first_name');
+            $collection->string('last_name');
+            $collection->string('email')->unique();
+            $collection->string('mobile_no');
+            $collection->string('password');
+            $collection->integer('purchased_credit');
+            $collection->unsignedBigInteger('package_id');
+            $collection->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::connection('mongodb')->dropIfExists('users');
     }
 };

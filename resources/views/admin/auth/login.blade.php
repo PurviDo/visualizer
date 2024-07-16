@@ -15,7 +15,7 @@
       </div>
       @endsession
       <div class="input-group mb-1">
-        <input name="email" type="email" class="form-control" placeholder="Email">
+        <input name="email" type="email" value="admin@visualizer.com" class="form-control" placeholder="Email">
         <div class="input-group-append">
           <div class="input-group-text">
             <span class="fas fa-envelope"></span>
@@ -26,7 +26,7 @@
       <div class="text-danger">{{ $message }}</div>
       @enderror
       <div class="input-group mb-3">
-        <input name="password" type="password" class="form-control" placeholder="Password">
+        <input name="password" type="password" class="form-control" value="123456" placeholder="Password">
         <div class="input-group-append">
           <div class="input-group-text">
             <span class="fas fa-lock"></span>

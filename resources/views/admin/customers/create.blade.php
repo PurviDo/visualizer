@@ -31,7 +31,7 @@
                         <h3 class="card-title">Create New Customer</h3>
                     </div>
 
-                    <form action="{{route('customer.save')}}" method="POST" name="create_customer" id="create_customer" class="">                    
+                    <form action="{{route('customers.store')}}" method="POST" name="create_customer" id="create_customer" class="">                    
                         <div class="card-body">
                             <div class="form-group">
                                 <label>First Name</label>
