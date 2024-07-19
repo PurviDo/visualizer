@@ -16,7 +16,6 @@ class UserRepository implements UserRepositoryInterface
         $request['password'] = Hash::make($request['password']);
         $packages_details = Package::first();
         $request['purchased_credit'] = $packages_details->credits;
-
         // $otp = rand(111111, 999999);
         $otp = 111111;
 
@@ -24,6 +23,24 @@ class UserRepository implements UserRepositoryInterface
         $request['user_type'] = 0;
         $request['is_active'] = 0;        
         $request['otp'] = $otp;
+        $request['deleted_at'] = null; 
+        $request['mobile_no'] = $request['phone_number'];
+
+        $user = User::create($request);
+        return $user;
+    }
+
+    public function createWebUser($request)
+    {
+        $request['password'] = Hash::make('123456');
+        $packages_details = Package::first();
+        $request['purchased_credit'] = $packages_details->credits;
+        $request['package_id'] = $packages_details->_id;
+        $request['user_type'] = 0;
+        $request['is_active'] = "1";        
+        $request['otp'] = null;
+        $request['deleted_at'] = null; 
+        $request['mobile_no'] = $request['phone_number'];
 
         $user = User::create($request);
         return $user;
@@ -52,7 +69,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function logout($userId)
     {
-        return User::where('_id', $userId)->where('user_type', 0)->update(array('device_token' => null, 'access_token' => null, 'updated_at' => now()));
+        return User::where('_id', $userId)->where('user_type', 0)->update(array('device_token' => null, 'access_token' => null));
     }
 
     public function getUserData()
@@ -62,6 +79,6 @@ class UserRepository implements UserRepositoryInterface
 
     public function delete($id)
     {
-        User::destroy($id);
+        return User::where('_id', $id)->where('user_type', 0)->update(array('deleted_at' => date('Y-m-d H:i:s'), 'is_active' => 0));
     }
 }

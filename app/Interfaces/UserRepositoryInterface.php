@@ -6,6 +6,8 @@ interface UserRepositoryInterface
 {
     public function createUser($request);
 
+    public function createWebUser($request);
+
     public function findUserByEmail($email);
 
     public function findUserById($id);

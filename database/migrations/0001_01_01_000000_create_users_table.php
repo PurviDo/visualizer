@@ -24,11 +24,11 @@ return new class extends Migration
             $table->integer('otp')->nullable();
             $table->string('device_token')->nullable();
             $table->string('access_token')->nullable();
-            $table->enum('user_type', [0, 1])->default('0')->comment('1:admin,0:customer');
-            $table->enum('is_active', ['0', '1'])->default('0');
+            $table->enum('user_type', [0, 1])->default(0)->comment('1:admin,0:customer');
+            $table->enum('is_active', ['0', '1'])->default('0')->comment('1:active,0:inactive');
+            $table->timestamp('deleted_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -38,7 +38,7 @@ return new class extends Migration
         });
 
         Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
+            // $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();

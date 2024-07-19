@@ -48,7 +48,7 @@ class AuthController extends Controller
     {
         $data = $this->userRepository->createUser($request->validated());
         if ($data) {
-            return $this->sendResponse('Created successfully.', 1, array($data), $this->successStatus);
+            return $this->sendResponse('User Created successfully.', 1, array($data), $this->successStatus);
         }
         return $this->sendResponse('Something went wrong.', 0, null, $this->failedStatus);
     }
@@ -57,6 +57,7 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         $credentials['user_type'] = 0;
+        $credentials['deleted_at'] = null;
         $credentials['is_active'] = "1";
         
         if (Auth::attempt($credentials)) {

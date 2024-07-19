@@ -32,7 +32,8 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
-        $credentials['user_type'] = "1";
+        $credentials['user_type'] = 1;
+        $credentials['deleted_at'] = null;
         $credentials['is_active'] = "1";
         
         if (Auth::attempt($credentials)) {

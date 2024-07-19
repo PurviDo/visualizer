@@ -22,8 +22,13 @@ class UserSeeder extends Seeder
             'last_name' => 'admin',
             'password' => bcrypt('123456'),
             'email' => 'admin@visualizer.com',
-            'user_type' => '1',
-            'is_active' => '1'
+            'mobile_no' => '1234567890',
+            'purchased_credit' => 0,
+            'package_id' => "1",
+            'user_type' => 1,
+            'is_active' => '1',
+            'otp' => null,
+            'deleted_at' => null,
         ]);
 
         User::create([
@@ -31,11 +36,13 @@ class UserSeeder extends Seeder
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
             'mobile_no' => '1234567890',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('123456'),
             'purchased_credit' => 10,
             'package_id' => "1",
-            'user_type' => '0',
-            'is_active' => '1'
+            'user_type' => 0,
+            'is_active' => '1',
+            'otp' => null,
+            'deleted_at' => null,
         ]);
     }
 }

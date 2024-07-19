@@ -48,17 +48,6 @@
             aria-labelledby="myModalLabel35" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    {{-- <div class="form-overlay category-loading">
-                        <h3>
-                            <center>
-                                <div class="spinner-border text-primary" role="status" style="height: 45px; width:45px;">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </center>
-                            <br>
-                            Loading... Please Wait
-                        </h3>
-                    </div> --}}
                     <div class="modal-header">
                         <h3 class="modal-title"></h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -90,144 +79,143 @@
         </div>
     </section>
 @endsection
-@section('script')
-    
-    <script>
-        $(document).ready(function() {
+@section('script')    
+<script>
+    $(document).ready(function() {
 
-            $.ajaxSetup({
-            	headers: {
-            		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            	}
-            });
-
-            $('#data-table').DataTable({
-                processing: true,
-                serverSide: true,
-                language: {
-                    searchPlaceholder: 'Search...',
-                    scrollX: "100%",
-                    sSearch: '',
-                },
-                ajax: {
-                    url: "{{ route('category.index') }}",
-                    type: 'GET'
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    }, {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
-                ]
-            });
-        });
-
-        $(document).on('click', '.add-category', function() {
-            modalShow('.category-modal');
-            $('.modal-title').html("Add Category");
-        });
-
-        $(document).on('click', '.edit-category', function() {
-            var id, title;
-            id = $(this).data('id');
-            name = $(this).data('name');
-            modalShow('.category-modal');
-            $('.modal-title').html("Edit Category");
-            $('.category-id').val(id);
-            $('.name').val(name);
-        });
-
-        $(document).on('click', '.delete-category,.restore-category', function() {
-            var message;
-            url = $(this).data('action');
-            if ($(this).hasClass('delete-category')) {
-                message = "Are you sure, you want to delete this Category ?";
-            } else if ($(this).hasClass('restore-category')) {
-                message = "Are you sure, you want to restore this Category ?";
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-            Swal.fire({
-                    title: message,
-                    icon: "warning",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No',
-                    confirmButtonClass: "btn btn-primary",
-                    cancelButtonClass: "btn btn-danger",
-                    reverseButtons: true,
-                    focusConfirm: false,
-                    focusCancel: false,
-                })
-                .then(function(result) {
-                    if (result.value) {
-                        $.ajax({
-                            url: url,
-                            method: "DELETE",
-                            success: function(response) {
-                                refresh_datatable();
-                                toastr.success(response.message);
-                            }
-                        });
-                    }
-                });
         });
 
-        $(document).on('submit', '#category-form', function(e) {
-            e.preventDefault();
-            var url, name, nameInvalid, modal, form;
-            url = $(this).attr('action');
-            name = $('.name');
-            nameInvalid = $('.name-invalid');
-            modal = $('.category-modal');
-            form = $('#category-form');
-            $('.category-loading').addClass('show');
-            $.ajax({
-                url: url,
-                type: "POST",
-                dataType: 'json',
-                data: $(this).serialize(),
-
-                success: function(response) {
-                    $('.category-loading').removeClass('show');
-                    if (response.success) {
-                        modalHide(modal);
-                        refresh_datatable();
-                        $(form)[0].reset();
-                        // toastr.success(response.message);
-                    } else {
-                        if (response.data.name) {
-                            name.addClass('is-invalid');
-                            nameInvalid.html(response.data.name[0]);
-                        }
-                    }
+        $('#data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            language: {
+                searchPlaceholder: 'Search...',
+                scrollX: "100%",
+                sSearch: '',
+            },
+            ajax: {
+                url: "{{ route('category.index') }}",
+                type: 'GET'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'name',
+                    name: 'name'
                 },
-            });
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
         });
+    });
 
-        function modalShow(modalName) {
-            $('.form-control').removeClass('is-invalid');
-            $('.invalid-feedback').html('');
-            $('#category-form')[0].reset();
-            $('.category-id').val(0);
-            $(modalName).modal('show');
-        }
+    $(document).on('click', '.add-category', function() {
+        modalShow('.category-modal');
+        $('.modal-title').html("Add Category");
+    });
 
-        function modalHide(modalName) {
-            $(modalName).modal('hide');
-        }
+    $(document).on('click', '.edit-category', function() {
+        var id, title;
+        id = $(this).data('id');
+        name = $(this).data('name');
+        modalShow('.category-modal');
+        $('.modal-title').html("Edit Category");
+        $('.category-id').val(id);
+        $('.name').val(name);
+    });
 
-        function refresh_datatable(response) {
-            $('#data-table').DataTable().ajax.reload(null, false);
+    $(document).on('click', '.delete-category,.restore-category', function() {
+        var message;
+        url = $(this).data('action');
+        if ($(this).hasClass('delete-category')) {
+            message = "Are you sure, you want to delete this Category ?";
+        } else if ($(this).hasClass('restore-category')) {
+            message = "Are you sure, you want to restore this Category ?";
         }
-    </script>
+        Swal.fire({
+                title: message,
+                icon: "warning",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                confirmButtonClass: "btn btn-primary",
+                cancelButtonClass: "btn btn-danger",
+                reverseButtons: true,
+                focusConfirm: false,
+                focusCancel: false,
+            })
+            .then(function(result) {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        method: "DELETE",
+                        success: function(response) {
+                            refresh_datatable();
+                            toastr.success(response.message);
+                        }
+                    });
+                }
+            });
+    });
+
+    $(document).on('submit', '#category-form', function(e) {
+        e.preventDefault();
+        var url, name, nameInvalid, modal, form;
+        url = $(this).attr('action');
+        name = $('.name');
+        nameInvalid = $('.name-invalid');
+        modal = $('.category-modal');
+        form = $('#category-form');
+        $('.category-loading').addClass('show');
+        $.ajax({
+            url: url,
+            type: "POST",
+            dataType: 'json',
+            data: $(this).serialize(),
+
+            success: function(response) {
+                $('.category-loading').removeClass('show');
+                if (response.success) {
+                    modalHide(modal);
+                    refresh_datatable();
+                    $(form)[0].reset();
+                    // toastr.success(response.message);
+                } else {
+                    if (response.data.name) {
+                        name.addClass('is-invalid');
+                        nameInvalid.html(response.data.name[0]);
+                    }
+                }
+            },
+        });
+    });
+
+    function modalShow(modalName) {
+        $('.form-control').removeClass('is-invalid');
+        $('.invalid-feedback').html('');
+        $('#category-form')[0].reset();
+        $('.category-id').val(0);
+        $(modalName).modal('show');
+    }
+
+    function modalHide(modalName) {
+        $(modalName).modal('hide');
+    }
+
+    function refresh_datatable(response) {
+        $('#data-table').DataTable().ajax.reload(null, false);
+    }
+</script>
 @endsection

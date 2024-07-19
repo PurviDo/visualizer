@@ -9,24 +9,23 @@ use App\Helpers\Helper;
 use App\Models\Package;
 use App\Services\UserServices;
 use Yajra\DataTables\DataTables;
+use App\Http\Requests\RegisterApiRequest;
+use App\Interfaces\UserRepositoryInterface;
 
 class UserController extends Controller
 {
-    public function __construct(private UserServices $userServices)
+    protected $userRepository = '';
+
+    public function __construct(UserRepositoryInterface $userRepository)
     {
+        $this->userRepository = $userRepository;
     }
 
     public function index(Request $request)
     {
-        // if ($request->filled('searchvalue') && $request->get('searchvalue') == "searchdata") {
-        //     // $isSearch = $this->leadServices->search($request);
-        //     // $data = ['customers' => $customers];
-        // } else {
-        //     $customers = $this->userServices->getAllUsers();
-        //     $data = ['customers' => $customers];
-        // }
         if ($request->ajax()) {
-            $data = $this->userServices->getAllUsers();
+            $data = User::where('user_type', 0)->whereNull('deleted_at')->orderBy('created_at', 'DESC')->get();
+            
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('user_name', function ($row) {
@@ -47,10 +46,16 @@ class UserController extends Controller
         return view('admin.customers.index', compact('package'));
     }
 
-    public function store(Request $request)
+    public function store(RegisterApiRequest $request)
     {
-        return $this->userServices->create($request);
-        // dd($request->all());
+        $users = $this->userRepository->createWebUser($request->validated());
+        $message = "User Created successfully.";
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'data' => [],
+        ]);
     }
 
     public function show($id)
@@ -60,6 +65,18 @@ class UserController extends Controller
             'success' => true,
             'message' => "",
             'data' => $data,
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $users = $this->userRepository->delete($id);
+        echo $message = "User Deleted successfully."; exit;
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'data' => [],
         ]);
     }
 }

@@ -26,11 +26,11 @@ class RegisterApiRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name'    => 'required|max:40',
-            'last_name'     => 'required|max:40',
-            'phone_number'  => 'required|numeric',
+            'first_name'    => 'required|max:100',
+            'last_name'     => 'required|max:100',
+            'phone_number'  => 'required|string|min:9|max:10|nullable|regex:/[0-9]{9}/',
             'email'         => 'required|email|unique:users,email',
-            'password'      => 'required|min:8',
+            'password'      => 'min:8',
         ];
     }
 

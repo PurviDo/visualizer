@@ -34,6 +34,7 @@
                                             <th>Email</th>
                                             <th>Mobile No.</th>
                                             <th>Credits Purchased</th>
+                                            <th>Is Active?</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -51,17 +52,6 @@
             aria-labelledby="myModalLabel35" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    {{-- <div class="form-overlay category-loading">
-                        <h3>
-                            <center>
-                                <div class="spinner-border text-primary" role="status" style="height: 45px; width:45px;">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </center>
-                            <br>
-                            Loading... Please Wait
-                        </h3>
-                    </div> --}}
                     <div class="modal-header">
                         <h3 class="modal-title"></h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -87,7 +77,7 @@
 
                             <fieldset class="form-group floating-label-form-group">
                                 <label for="mobile-no">Mobile No.<span class="text-danger">*</span></label>
-                                <input type="number" name="mobile_no" class="form-control mobile-no"
+                                <input type="number" name="phone_number" class="form-control mobile-no"
                                     placeholder="Enter Mobile No. " required>
                                 <div class="invalid-feedback font-weight-bold mobile-no-invalid" role="alert">
                                 </div>
@@ -100,42 +90,6 @@
                                 <div class="invalid-feedback font-weight-bold email-invalid" role="alert">
                                 </div>
                             </fieldset>
-
-
-                            {{-- <fieldset class="form-group floating-label-form-group">
-                                <label for="credits">No of Credit <span class="text-danger">*</span></label>
-                                <input type="number" name="credits" class="form-control credits"
-                                    placeholder="Enter No of Credit" required>
-                                <div class="invalid-feedback font-weight-bold credits-invalid" role="alert">
-                                </div>
-                            </fieldset>
-
-                            <fieldset class="form-group floating-label-form-group">
-                                <label for="actual_price">Actual Price <span class="text-danger">*</span></label>
-                                <input type="digit" name="actual_price" class="form-control actual_price"
-                                    placeholder="Enter Actual Price" required>
-                                <div class="invalid-feedback font-weight-bold actual_price-invalid" role="alert">
-                                </div>
-                            </fieldset>
-
-                            <fieldset class="form-group floating-label-form-group">
-                                <label for="discounted_price">Discounted Price <span class="text-danger">*</span></label>
-                                <input type="digit" name="discounted_price" class="form-control discounted_price"
-                                    placeholder="Enter Discounted Price" required>
-                                <div class="invalid-feedback font-weight-bold discounted_price-invalid" role="alert">
-                                </div>
-                            </fieldset> --}}
-
-                            {{-- <fieldset class="form-group floating-label-form-group">
-                                <label for="status">Status <span class="text-danger">*</span></label>
-                                <select name="status" class="form-control status" required>
-                                    <option value="">Select Status</option>
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                                <div class="invalid-feedback font-weight-bold status-invalid" role="alert">
-                                </div>
-                            </fieldset> --}}
 
                             <fieldset class="form-group text-right mb-0">
                                 <button type="reset" class="btn" data-dismiss="modal">
@@ -209,233 +163,183 @@
 
     </section>
 @endsection
-@section('script')
-    <script>
-        $(document).ready(function() {
+@section('script')    
+<script>
+    $(document).ready(function() {
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $('#data-table').DataTable({
-                processing: true,
-                serverSide: true,
-                language: {
-                    searchPlaceholder: 'Search...',
-                    scrollX: "100%",
-                    sSearch: '',
-                },
-                ajax: {
-                    url: "{{ route('customers.index') }}",
-                    type: 'GET'
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'user_name',
-                        name: 'user_name'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'mobile_no',
-                        name: 'mobile_no'
-                    },
-                    {
-                        data: 'purchased_credit',
-                        name: 'purchased_credit'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
-                ]
-            });
-        });
-
-        $(document).on('click', '.add-item-button', function() {
-            modalShow('.primary-submit-modal');
-            $('.modal-title').html("Add Customer");
-        });
-
-        $(document).on('click', '.show-customer', function() {
-            url = $(this).data('action')
-            $.ajax({
-                url: url,
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        var customer = response.data;
-                        $('#customer-first-name').text(customer.first_name);
-                        $('#customer-last-name').text(customer.last_name);
-                        $('#customer-email').text(customer.email);
-                        $('#customer-mobile-no').text(customer.mobile_no);
-                        $('#customer-package-name').text(customer.package.name);
-
-                        $('.primary-show-modal').modal('show');
-                    } else {
-                        console.error('Error fetching package data');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX error:', error);
-                }
-            });
-
-
-        });
-
-        $(document).on('click', '.edit-customer', function() {
-            url = $(this).data('action')
-            $.ajax({
-                url: url,
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-
-                        modalShow('.primary-submit-modal');
-                        $('.modal-title').html("Edit User");
-                        var package = response.data;
-
-                        $('.id').val(package._id);
-                        $('.first-name').val(package.first_name);
-                        $('.last-name').val(package.last_name);
-                        $('.email').val(package.email);
-                        $('.mobile-no').val(package.mobile_no);
-
-                    } else {
-                        console.error('Error fetching package data');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX error:', error);
-                }
-            });
-        });
-
-        $(document).on('click', '.delete-customer,.restore-customer', function() {
-            var message;
-            url = $(this).data('action');
-            if ($(this).hasClass('delete-customer')) {
-                message = "Are you sure, you want to delete this Customer ?";
-            } else if ($(this).hasClass('restore-category')) {
-                message = "Are you sure, you want to restore this Customer ?";
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-            Swal.fire({
-                    title: message,
-                    icon: 'warning',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No',
-                    confirmButtonClass: "btn btn-primary",
-                    cancelButtonClass: "btn btn-danger",
-                    reverseButtons: true,
-                    focusConfirm: false,
-                    focusCancel: false,
-                })
-                .then(function(result) {
-                    if (result.value) {
-                        $.ajax({
-                            url: url,
-                            method: "DELETE",
-                            success: function(response) {
-                                refresh_datatable();
-                            }
-                        });
-                    }
-                });
         });
 
-        $(document).on('submit', '#primary-submit-form', function(e) {
-            e.preventDefault();
-            var url = $(this).attr('action');
-            var fields = [{
-                    name: 'name',
-                    invalidClass: 'name-invalid'
+        $('#data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            language: {
+                searchPlaceholder: 'Search...',
+                scrollX: "100%",
+                sSearch: '',
+            },
+            ajax: {
+                url: "{{ route('customers.index') }}",
+                type: 'GET'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
                 },
                 {
-                    name: 'duration',
-                    invalidClass: 'duration-invalid'
+                    data: 'user_name',
+                    name: 'user_name'
                 },
                 {
-                    name: 'description',
-                    invalidClass: 'description-invalid'
+                    data: 'email',
+                    name: 'email'
                 },
                 {
-                    name: 'credits',
-                    invalidClass: 'credits-invalid'
+                    data: 'mobile_no',
+                    name: 'mobile_no',
+                    "defaultContent": ""
                 },
                 {
-                    name: 'actual_price',
-                    invalidClass: 'actual_price-invalid'
+                    data: 'purchased_credit',
+                    name: 'purchased_credit'
                 },
                 {
-                    name: 'discounted_price',
-                    invalidClass: 'discounted_price-invalid'
+                    data: 'is_active',
+                    name: 'is_active',
+                    render: function(data, type, row) {
+                        // Custom rendering for the is_active field
+                        return data ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>';
+                    }
                 },
                 {
-                    name: 'status',
-                    invalidClass: 'status-invalid'
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
                 }
-            ];
-
-            var modal = $('.primary-submit-modal');
-            var form = $('#primary-submit-form');
-            $.ajax({
-                url: url,
-                type: "POST",
-                dataType: 'json',
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.success) {
-                        modalHide(modal);
-                        refresh_datatable();
-                        form[0].reset();
-                    } else {
-                        fields.forEach(function(field) {
-                            var input = $('.' + field.name);
-                            var invalidFeedback = $('.' + field.invalidClass);
-
-                            if (response.data[field.name]) {
-                                input.addClass('is-invalid');
-                                invalidFeedback.html(response.data[field.name][0]);
-                            } else {
-                                input.removeClass('is-invalid');
-                                invalidFeedback.html('');
-                            }
-                        });
-                    }
-                },
-            });
+            ]
         });
+    });
 
-        function modalShow(modalName) {
-            $('.form-control').removeClass('is-invalid');
-            $('.invalid-feedback').html('');
-            $('#primary-submit-form')[0].reset();
-            $('.id').val(0);
-            $(modalName).modal('show');
-        }
+    $(document).on('click', '.add-item-button', function() {
+        modalShow('.primary-submit-modal');
+        $('.modal-title').html("Add User");
+    });
 
-        function modalHide(modalName) {
-            $(modalName).modal('hide');
-        }
+    $(document).on('click', '.edit-category', function() {
+        var id, title;
+        id = $(this).data('id');
+        name = $(this).data('name');
+        modalShow('.category-modal');
+        $('.modal-title').html("Edit Category");
+        $('.category-id').val(id);
+        $('.name').val(name);
+    });
 
-        function refresh_datatable(response) {
-            $('#data-table').DataTable().ajax.reload(null, false);
+    $(document).on('click', '.delete-customer,.restore-customer', function() {
+        var message;
+        url = $(this).data('action');
+        if ($(this).hasClass('delete-customer')) {
+            message = "Are you sure, you want to delete this User?";
+        } else if ($(this).hasClass('restore-customer')) {
+            message = "Are you sure, you want to restore this User?";
         }
-    </script>
+        Swal.fire({
+                title: message,
+                icon: "warning",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                confirmButtonClass: "btn btn-primary",
+                cancelButtonClass: "btn btn-danger",
+                reverseButtons: true,
+                focusConfirm: false,
+                focusCancel: false,
+            })
+            .then(function(result) {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        method: "DELETE",
+                        success: function(response) {
+                            refresh_datatable();
+                            // toastr.success(response.message);
+                        }
+                    });
+                }
+            });
+    });
+
+    $(document).on('submit', '#primary-submit-form', function(e) {
+        e.preventDefault();
+        var url, name, nameInvalid, modal, form;
+        url = $(this).attr('action');        
+        modal = $('.primary-submit-modal');
+        form = $('#primary-submit-form');
+        $('.category-loading').addClass('show');
+        $.ajax({
+            url: url,
+            type: "POST",
+            dataType: 'json',
+            data: $(this).serialize(),
+
+            success: function(response) {
+                console.log(response.error);
+                $('.category-loading').removeClass('show');
+                if (response.success) {
+                    modalHide(modal);
+                    refresh_datatable();
+                    $(form)[0].reset();
+                    // toastr.success(response.message);
+                } else {
+                    
+                    if (response.data.name) {
+                        $('.first-name').addClass('is-invalid');
+                        nameInvalid.html(response.data.name[0]);
+                    }
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                if (xhr.responseJSON.error.first_name) {
+                    $('.first-name').addClass('is-invalid');
+                    $('.first-name-invalid').html(xhr.responseJSON.error.phone_number[0]);
+                }
+                else if (xhr.responseJSON.error.last_name) {
+                    $('.last-name').addClass('is-invalid');
+                    $('.last-name-invalid').html(xhr.responseJSON.error.phone_number[0]);
+                }
+                else if (xhr.responseJSON.error.phone_number) {
+                    $('.mobile-no').addClass('is-invalid');
+                    $('.mobile-no-invalid').html(xhr.responseJSON.error.phone_number[0]);
+                }
+                else if (xhr.responseJSON.error.email) {
+                    $('.email').addClass('is-invalid');
+                    $('.email-invalid').html(xhr.responseJSON.error.phone_number[0]);
+                }
+            }
+        });
+    });
+
+    function modalShow(modalName) {
+        $('.form-control').removeClass('is-invalid');
+        $('.invalid-feedback').html('');
+        $('#primary-submit-form')[0].reset();
+        $('.id').val(0);
+        $(modalName).modal('show');
+    }
+
+    function modalHide(modalName) {
+        $(modalName).modal('hide');
+    }
+
+    function refresh_datatable(response) {
+        $('#data-table').DataTable().ajax.reload(null, false);
+    }
+</script>
 @endsection
