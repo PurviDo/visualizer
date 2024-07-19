@@ -11,6 +11,8 @@ use App\Services\UserServices;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\RegisterApiRequest;
 use App\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -35,7 +37,7 @@ class UserController extends Controller
                     $showUrl = route('customers.show', $row->id);
                     $deleteUrl = route('customers.destroy', $row->id);
                     $btn = '<button class="btn btn-sm btn-warning btn-round tooltip-toggle edit-customer" data-action="' . $showUrl . '" data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
-                    $btn .= ' <button class="btn btn-sm btn-info btn-round tooltip-toggle show-customer" data-action="' . $showUrl . '" data-original-title="Edit"><i class="nav-icon fas fa-eye"></i></button>';
+                    $btn .= ' <button class="btn btn-sm btn-info btn-round tooltip-toggle show-customer" data-action="' . $showUrl . '" data-original-title="View"><i class="nav-icon fas fa-eye"></i></button>';
                     $btn .= ' <button class="btn btn-sm btn-danger btn-round tooltip-toggle delete-customer" data-original-title="Delete" data-action="' . $deleteUrl . '"><i class="nav-icon fas fa-trash"></i></button>';
                     return $btn;
                 })
@@ -58,9 +60,51 @@ class UserController extends Controller
         ]);
     }
 
+    public function update(Request $request, string $id)
+    {
+        $rules = [
+            'first_name' => [
+                'required',
+                'max:100',
+            ],
+            'last_name' => [
+                'required',
+                'max:100',
+            ],
+            'phone_number' => [
+                'required',
+                'min:9',
+                'max:10',
+                'nullable',
+                'regex:/[0-9]{9}/',
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($id, '_id'),
+            ],
+        ];
+
+        $update_arr = array(
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'mobile_no' => $request->phone_number,
+            'email' => $request->email,
+        );
+
+        $users = $this->userRepository->updateUser($id, $update_arr);
+        $message = "User updated successfully.";
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'data' => [],
+        ]);
+    }
+
     public function show($id)
     {
-        $data = $this->userServices->getUserById($id);
+        $data = $this->userRepository->findUserById($id);
         return response()->json([
             'success' => true,
             'message' => "",

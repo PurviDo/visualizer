@@ -48,12 +48,12 @@ class UserRepository implements UserRepositoryInterface
 
     public function findUserByEmail($email)
     {
-        return User::where('email', $email)->where('user_type', 0)->first();
+        return User::where('email', $email)->where('user_type', 0)->whereNull('deleted_at')->first();
     }
 
     public function findUserById($id)
     {
-        return User::where('_id', $id)->where('user_type', 0)->first();
+        return User::with('package')->where('_id', $id)->where('user_type', 0)->whereNull('deleted_at')->first();
     }
 
     public function updateUser($id, $data)

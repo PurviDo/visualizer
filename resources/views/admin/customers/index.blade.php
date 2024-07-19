@@ -59,7 +59,7 @@
                         </button>
                     </div>
                     <form id="primary-submit-form" action="{{ route('customers.store') }}">
-                        <input type="hidden" name="id" value="0" class="id">
+                        <input type="hidden" name="cid" value="0" class="id">
                         <div class="modal-body">
                             <fieldset class="form-group floating-label-form-group">
                                 <label for="first-name">First Name <span class="text-danger">*</span></label>
@@ -116,46 +116,34 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="name">First Name:</label>
-                            <p id="customer-first-name" class="form-control-plaintext"></p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="name">Last Name:</label>
-                            <p id="customer-last-name" class="form-control-plaintext"></p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <p id="customer-email" class="form-control-plaintext "></p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="mobile_no">Mobile No.:</label>
-                            <p id="customer-mobile-no" class="form-control-plaintext "></p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="package_name">Package Name:</label>
-                            <p id="customer-package-name" class="form-control-plaintext "></p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="start_date">Start Date:</label>
-                            <p id="package-start-date" class="form-control-plaintext "></p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="end_date">End Date:</label>
-                            <p id="package-end-date" class="form-control-plaintext "></p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="end_date">Template:</label>
-                            <p id="package-end-date" class="form-control-plaintext "></p>
-                        </div>
-
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>First Name:</th>
+                                    <td><p id="customer-first-name" class="form-control-plaintext"></p></td>
+                                </tr>
+                                <tr>
+                                    <th>Last Name:</th>
+                                    <td><p id="customer-last-name" class="form-control-plaintext"></p></td>
+                                </tr>
+                                <tr>
+                                    <th>Email:</th>
+                                    <td><p id="customer-email" class="form-control-plaintext"></p></td>
+                                </tr>
+                                <tr>
+                                    <th>Mobile No.:</th>
+                                    <td><p id="customer-mobile-no" class="form-control-plaintext"></p></td>
+                                </tr>
+                                <tr>
+                                    <th>Package Name:</th>
+                                    <td><p id="customer-package-name" class="form-control-plaintext"></p></td>
+                                </tr>
+                                <tr>
+                                    <th>Template:</th>
+                                    <td><p id="customer-template" class="form-control-plaintext"></p></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -227,18 +215,76 @@
     });
 
     $(document).on('click', '.add-item-button', function() {
+        $('#cid').val("");                    
+        // Set form action to update route
+        $('#primary-submit-form').attr('action', '{{ url('customers') }}/');
+        $('#primary-submit-form').attr('method', 'POST');
+
         modalShow('.primary-submit-modal');
         $('.modal-title').html("Add User");
     });
 
-    $(document).on('click', '.edit-category', function() {
-        var id, title;
-        id = $(this).data('id');
-        name = $(this).data('name');
-        modalShow('.category-modal');
-        $('.modal-title').html("Edit Category");
-        $('.category-id').val(id);
-        $('.name').val(name);
+    $(document).on('click', '.show-customer', function() {
+        url = $(this).data('action')
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    var customer = response.data;
+                    $('#customer-first-name').text(customer.first_name);
+                    $('#customer-last-name').text(customer.last_name);
+                    $('#customer-email').text(customer.email);
+                    $('#customer-mobile-no').text(customer.mobile_no);
+                    $('#customer-package-name').text(customer.package.name);
+
+                    // Show the form/modal
+                    $('.primary-show-modal').modal('show');
+                } else {
+                    console.error('Error fetching package data');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', error);
+            }
+        });
+
+
+    });
+
+    $(document).on('click', '.edit-customer', function() {
+        url = $(this).data('action')
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+
+                    modalShow('.primary-submit-modal');
+                    $('.modal-title').html("Edit User");
+                    var customer = response.data;
+
+                    $('.first-name').val(customer.first_name);
+                    $('.last-name').val(customer.last_name);
+                    $('.email').val(customer.email);
+                    $('.mobile-no').val(customer.mobile_no);
+                    $('#cid').val(customer._id);
+                    
+                    // Set form action to update route
+                    $('#primary-submit-form').attr('action', '{{ url('customers') }}/' + customer._id);
+                    // $('#primary-submit-form').attr('action', "{{ route('customers.update', "+customer._id+") }}");
+                    $('#primary-submit-form').attr('method', 'PUT');
+
+                } else {
+                    console.error('Error fetching package data');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', error);
+            }
+        });
     });
 
     $(document).on('click', '.delete-customer,.restore-customer', function() {
@@ -279,13 +325,14 @@
     $(document).on('submit', '#primary-submit-form', function(e) {
         e.preventDefault();
         var url, name, nameInvalid, modal, form;
-        url = $(this).attr('action');        
+        url = $(this).attr('action');  
+        method = $(this).attr('method');      
         modal = $('.primary-submit-modal');
         form = $('#primary-submit-form');
         $('.category-loading').addClass('show');
         $.ajax({
             url: url,
-            type: "POST",
+            type: method,
             dataType: 'json',
             data: $(this).serialize(),
 
