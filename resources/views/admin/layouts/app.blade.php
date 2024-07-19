@@ -78,8 +78,8 @@
   <!-- Sparkline -->
   <script src="{{ asset('/adminlte/plugins/sparklines/sparkline')}}.js"></script>
   <!-- JQVMap -->
-  <script src="{{ asset('/adminlte/plugins/jqvmap/jquery.vmap.m')}}in.js"></script>
-  <script src="{{ asset('/adminlte/plugins/jqvmap/maps/jquery.v')}}map.usa.js"></script>
+  <!-- <script src="{{ asset('/adminlte/plugins/jqvmap/jquery.vmap.m')}}in.js"></script> -->
+  <!-- <script src="{{ asset('/adminlte/plugins/jqvmap/maps/jquery.v')}}map.usa.js"></script> -->
   <!-- jQuery Knob Chart -->
   <script src="{{ asset('/adminlte/plugins/jquery-knob/jquery.k')}}nob.min.js"></script>
   <!-- daterangepicker -->
@@ -96,7 +96,7 @@
   <!-- AdminLTE for demo purposes -->
   <!-- <script src="{{ asset('/adminlte/dist/js/demo.js')}}"></script> -->
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-  <script src="{{ asset('/adminlte/dist/js/pages/dashboard.js')}}"></script>
+  <!-- <script src="{{ asset('/adminlte/dist/js/pages/dashboard.js')}}"></script> -->
 
   <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
