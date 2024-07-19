@@ -13,6 +13,7 @@ return new class extends Migration
     public function up()
     {
         Schema::connection('mongodb')->create('categories', function (Blueprint $collection) {
+            $collection->increments('id');
             $collection->index('name');
             $collection->index('parent_id');
             $collection->boolean('is_deleted')->default(false);

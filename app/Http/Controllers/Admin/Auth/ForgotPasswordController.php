@@ -77,7 +77,7 @@ class ForgotPasswordController extends Controller
         if (!$updatePassword) {
             return back()->withInput()->with('error', 'Invalid token!');
         } else {
-            $user = User::where('email', $updatePassword['email'])
+            $user = User::where('email', $updatePassword['email'])->where('user_type', 1)
                 ->update(['password' => \Hash::make($request->password)]);
         }
 

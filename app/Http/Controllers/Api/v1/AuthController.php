@@ -1,23 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+
 use App\Http\Requests\ForgotPasswordApiRequest;
 use App\Http\Requests\LoginApiRequest;
 use App\Http\Requests\RegisterApiRequest;
 use App\Http\Requests\ResetPasswordApiRequest;
 use App\Http\Requests\VerifyOtpApiRequest;
-use App\Interfaces\UserRepositoryInterface;
-use App\Mail\VerifyEmail;
-use App\Models\EmailTemplate;
+use App\Http\Requests\ResentOtpApiRequest;
+
 use App\Traits\ApiResponseTrait;
+
+use App\Interfaces\UserRepositoryInterface;
+
+use App\Mail\VerifyEmail;
+
+use App\Models\EmailTemplate;
+
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Helpers\Helper;
+
 use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class AuthController extends Controller
@@ -26,42 +34,14 @@ class AuthController extends Controller
     use HasApiTokens;
 
     protected $userRepository = '';
-    // public function test()  {
-    //     return true;
-    // }
 
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }
 
-    public function signUp(Request $request)
+    public function signUp(RegisterApiRequest $request)
     {
-
-        $rules = [
-            'name'          => 'required|max:40',
-            'first_name'    => 'required|max:40',
-            'last_name'     => 'required|max:40',
-            'phone_number'  => 'required|numeric',
-            'email'         => 'required|email|unique:users,email',
-            'password'      => 'required|min:8',
-        ];
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return $this->sendResponse(
-                trans('validation.create_success'),
-                false,
-                $validator->error(),
-                Response::HTTP_FORBIDDEN
-            );
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation errors occurred',
-                'data' => $validator->errors()
-            ]);
-        }
         $data = $this->userRepository->createUser($request->validated());
         if ($data) {
             return $this->sendResponse(trans('validation.create_success'), 1, array($data), $this->successStatus);
@@ -71,17 +51,20 @@ class AuthController extends Controller
 
     public function SignIn(LoginApiRequest $request)
     {
-        if (Auth::attempt(array('email' => $request->email, 'password' => $request->password, 'status' => '1'))) {
+        $credentials = $request->only('email', 'password');
+        $credentials['user_type'] = 0;
+        $credentials['is_active'] = "1";
+        
+        if (Auth::attempt($credentials)) {
 
-            $user = Auth::user();
-            $user['access_token'] = $user->createToken('MyAuthApp')->plainTextToken;
-
+            $user = Auth::user();            
+            $user['access_token'] = Helper::createToken();
             $this->userRepository->updateUser($user->id, ["access_token" => $user['access_token']]);
 
             return $this->sendResponse(trans(
                 'messages.custom.login_messages',
                 ["attribute" => "User"]
-            ), 1, array($user->only('access_token', 'id', 'name')), $this->successStatus);
+            ), 1, $user, $this->successStatus);
         } elseif (Auth::attempt(array('email' => $request->email, 'password' => $request->password, 'status' => '0'))) {
             return $this->sendResponse(trans('messages.custom.account_verify'), 0, null, $this->failedStatus);
         } else {
@@ -110,22 +93,22 @@ class AuthController extends Controller
         return $this->sendResponse(trans('validation.email_not_exist_error'), 0, null, $this->failedStatus);
     }
 
-    public function resendOtp(ForgotPasswordApiRequest $request)
+    public function resendOtp(ResentOtpApiRequest $request)
     {
-        $result = $this->userRepository->findUserByEmail($request->email);
+        $result = $this->userRepository->findUserById($request->user_id);
         if ($result) {
-            // $otp = rand(1111, 9999);
-            $otp = 1111;
-            $this->userRepository->updateUser($result->id, ['otp' => $otp, 'updated_at' => now()]);
+            // $otp = rand(111111, 999999);
+            $otp = 111111;
+            $this->userRepository->updateUser($result->id, ['otp' => $otp, 'is_active' => '1', 'updated_at' => now()]);
 
-            $emailTemplate = EmailTemplate::getOtpTemplate();
-            $subject = $emailTemplate->subject;
-            $html = $emailTemplate->html;
-            $html = str_replace('{{OTP}}', $otp, $html);
-            $html = str_replace('{{USERNAME}}', $result->name, $html);
+            // $emailTemplate = EmailTemplate::getOtpTemplate();
+            // $subject = $emailTemplate->subject;
+            // $html = $emailTemplate->html;
+            // $html = str_replace('{{OTP}}', $otp, $html);
+            // $html = str_replace('{{USERNAME}}', $result->name, $html);
 
-            Mail::to($result->email)->send(new VerifyEmail($subject, $html));
-            return $this->sendResponse(trans('messages.custom.verify_code'), 1, array(["id" => $result->id, "email" => $request->email]), $this->successStatus);
+            // Mail::to($result->email)->send(new VerifyEmail($subject, $html));
+            return $this->sendResponse(trans('messages.custom.resent_code'), 1, array(["id" => $result->id, "email" => $request->email]), $this->successStatus);
         }
         return $this->sendResponse(trans('validation.email_not_exist_error'), 0, null, $this->failedStatus);
     }
@@ -133,11 +116,13 @@ class AuthController extends Controller
     public function verifyOtp(VerifyOtpApiRequest $request)
     {
         $result = $this->userRepository->findUserById($request->user_id);
+        
         if ($result) {
-            //use 1111 code for verify otp
-            if ($request->otp == $result->otp || $request->otp == 1111) {
+            //use 111111 code for verify otp
+            if ($request->otp == $result->otp) {
                 if ($request->otp == $result->otp) {
-                    $this->userRepository->updateUser($request->user_id, ["otp" => null]);
+                    
+                    $this->userRepository->updateUser($request->user_id, ["otp" => null, 'is_active' => '1']);
                 }
                 return $this->sendResponse(trans('messages.custom.otp_code'), 1, array(["id" => $result->id]), $this->successStatus);
             } else {
@@ -180,9 +165,9 @@ class AuthController extends Controller
         }
     }
 
-    // public function getUser(Request $request)
-    // {
-    //     $data = $this->userRepository->getUserData($request);
-    //     return $this->sendResponse(trans('messages.custom.get_data'), 1, $data, $this->successStatus);
-    // }
+    public function getUser(Request $request)
+    {
+        $data = $this->userRepository->getUserData($request);
+        return $this->sendResponse(trans('messages.custom.get_data'), 1, $data, $this->successStatus);
+    }
 }

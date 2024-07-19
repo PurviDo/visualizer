@@ -2,14 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\Customer;
+use App\Models\User;
+use App\Models\Package;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class CustomerServices
+class UserServices
 {
     use ValidatesRequests;
 
@@ -22,12 +23,10 @@ class CustomerServices
             'email' => [
                 'required',
                 'email',
-                Rule::unique('customers')->ignore($id, '_id'),
+                Rule::unique('users')->ignore($id, '_id'),
             ],
             'mobile_no' => 'string|min:9|max:10|nullable|regex:/[0-9]{9}/',
         ];
-
-
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -38,22 +37,15 @@ class CustomerServices
             ]);
             // return redirect(route('leads'))->with('error-create', 'Error creating Leads')->withErrors($validator)->withInput();
         }
-        // echo "<pre>"; print_r($request->all()); exit;
+        $package_id = Package::first(); exit;
 
-        $customer = new Customer();
+        $customer = new User();
         $customer->name = $request->name;
         $customer->lname = $request->lname;
         $customer->email = $request->email;
-        $customer->phone = $request->phone;
-        $customer->passport = $request->passport;
-        $customer->status_id = !empty($request->status_id) ? $request->status_id : '';
-        $customer->city_id = !empty($request->city_id) ? $request->city_id : '';
-        $customer->source_id = !empty($request->source_id) ? $request->source_id : '';
-        $customer->user_id = !empty($request->user_id) ? $request->user_id : '';
-        $customer->address = $request->address;
-        $customer->notes = $request->notes;
-        $customer->date_contact = isset($request->date_contact) ? date('Y-m-d H:i:s', strtotime($request->date_contact)) : date('Y-m-d H:i:s');
-
+        $customer->mobile_no = $request->phone;
+        $customer->purchased_credit = 10;
+        $customer->package_id = Package::first();
         return $customer->save();
     }
 
@@ -114,13 +106,13 @@ class CustomerServices
         return $customers;
     }
 
-    public function getAllCustomers()
+    public function getAllUsers()
     {
-        return Customer::get();
+        return User::where('user_type', 0)->get();
     }
 
-    public function getCustomerById($id)
+    public function getUserById($id)
     {
-        return Customer::with('package')->findOrFail($id);
+        return User::with('package')->where('user_type', 0)->findOrFail($id);
     }
 }

@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\SubCategoryController;
@@ -25,22 +25,18 @@ Route::middleware('guest')->group(function () {
 });
 
 // Authenticated routes
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:web')->group(function () {
     Route::get('/', function () {
         return redirect()->route('dashboard');
     });
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Users
-    Route::resource('customers', CustomerController::class);
-
-    // Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
-    // Route::get('/customers/create', [CustomerController::class, 'create']);
-    // Route::post('/customers/save', [CustomerController::class, 'save'])->name('customer.store');
-    // Route::get('/customers/edit', [CustomerController::class, 'edit']);
+    Route::resource('customers', UserController::class);
 
     // Template Management
     Route::get('/template_mg', [DashboardController::class, 'index'])->name('dashboard');

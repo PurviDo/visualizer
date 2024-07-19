@@ -17,10 +17,25 @@ class UserSeeder extends Seeder
         DB::table('users')->delete();
 
         // Admin
-        DB::connection('mongodb')->collection('users')->insert([
-            'name' => 'admin',
+        User::create([
+            'first_name' => 'admin',
+            'last_name' => 'admin',
             'password' => bcrypt('123456'),
             'email' => 'admin@visualizer.com',
+            'user_type' => '1',
+            'is_active' => '1'
+        ]);
+
+        User::create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'mobile_no' => '1234567890',
+            'password' => bcrypt('password'),
+            'purchased_credit' => 10,
+            'package_id' => "1",
+            'user_type' => '0',
+            'is_active' => '1'
         ]);
     }
 }

@@ -12,6 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('packages', function (Blueprint $collection) {
+            $collection->increments('id');
             $collection->string('name');
             $collection->integer('duration'); 
             $collection->string('description');

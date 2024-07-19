@@ -17,12 +17,12 @@ class PackageSeeder extends Seeder
     {
         Package::truncate();
         Package::create([
-            'name' => 'Basic Package',
-            'duration' => 3,
+            'name' => 'Basic Free Package',
+            'duration' => 6,
             'description' => 'A basic package for beginners',
             'credits' => 10,
-            'actual_price' => 100.00,
-            'discounted_price' => 90.00,
+            'actual_price' => 00.00,
+            'discounted_price' => 00.00,
             'status' => 'Active',
         ]);
 
@@ -38,7 +38,7 @@ class PackageSeeder extends Seeder
 
         Package::create([
             'name' => 'Premium Package',
-            'duration' => 12,
+            'duration' => 6,
             'description' => 'A premium package for advanced users',
             'credits' => 50,
             'actual_price' => 300.00,

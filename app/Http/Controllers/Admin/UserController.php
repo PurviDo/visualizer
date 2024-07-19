@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Customer;
+use App\Models\User;
 use App\Helpers\Helper;
 use App\Models\Package;
-use App\Services\CustomerServices;
+use App\Services\UserServices;
 use Yajra\DataTables\DataTables;
 
-class CustomerController extends Controller
+class UserController extends Controller
 {
-    public function __construct(private CustomerServices $customerServices)
+    public function __construct(private UserServices $userServices)
     {
     }
 
@@ -22,11 +22,11 @@ class CustomerController extends Controller
         //     // $isSearch = $this->leadServices->search($request);
         //     // $data = ['customers' => $customers];
         // } else {
-        //     $customers = $this->customerServices->getAllCustomers();
+        //     $customers = $this->userServices->getAllUsers();
         //     $data = ['customers' => $customers];
         // }
         if ($request->ajax()) {
-            $data = $this->customerServices->getAllCustomers();
+            $data = $this->userServices->getAllUsers();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('user_name', function ($row) {
@@ -49,13 +49,13 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        return $this->customerServices->create($request);
+        return $this->userServices->create($request);
         // dd($request->all());
     }
 
     public function show($id)
     {
-        $data = $this->customerServices->getCustomerById($id);
+        $data = $this->userServices->getUserById($id);
         return response()->json([
             'success' => true,
             'message' => "",
