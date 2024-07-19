@@ -17,6 +17,4 @@ interface UserRepositoryInterface
     public function getUserData();
 
     public function delete($id);
-
-    public function all();
 }

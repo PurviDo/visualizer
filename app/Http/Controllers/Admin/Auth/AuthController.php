@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Traits\ApiResponseTrait;
 
 class AuthController extends Controller
 {
@@ -31,7 +32,8 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
-        $credentials['user_type'] = 1;
+        $credentials['user_type'] = "1";
+        $credentials['is_active'] = "1";
         
         if (Auth::attempt($credentials)) {
             return redirect()->intended('dashboard')

@@ -26,7 +26,7 @@ class ResetPasswordApiRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id'               => 'required|numeric',
+            'token'               => 'required',
             'new_password'          => 'min:8|required_with:new_password_confirm|same:new_password_confirm',
             'new_password_confirm'  => 'min:8|required',
         ];

@@ -16,12 +16,13 @@ use App\Traits\ApiResponseTrait;
 use App\Interfaces\UserRepositoryInterface;
 
 use App\Mail\VerifyEmail;
-
-use App\Models\EmailTemplate;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 use App\Helpers\Helper;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Support\Facades\Auth;
@@ -38,15 +39,18 @@ class AuthController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
+        $this->successStatus = 200;
+        $this->failedStatus = 401;
+        $this->notFoundStatus = 404;
     }
 
     public function signUp(RegisterApiRequest $request)
     {
         $data = $this->userRepository->createUser($request->validated());
         if ($data) {
-            return $this->sendResponse(trans('validation.create_success'), 1, array($data), $this->successStatus);
+            return $this->sendResponse('Created successfully.', 1, array($data), $this->successStatus);
         }
-        return $this->sendResponse(trans('validation.unknown_error'), 0, null, $this->failedStatus);
+        return $this->sendResponse('Something went wrong.', 0, null, $this->failedStatus);
     }
 
     public function SignIn(LoginApiRequest $request)
@@ -61,14 +65,11 @@ class AuthController extends Controller
             $user['access_token'] = Helper::createToken();
             $this->userRepository->updateUser($user->id, ["access_token" => $user['access_token']]);
 
-            return $this->sendResponse(trans(
-                'messages.custom.login_messages',
-                ["attribute" => "User"]
-            ), 1, $user, $this->successStatus);
+            return $this->sendResponse('User Logged In successfully.', 1, $user, $this->successStatus);
         } elseif (Auth::attempt(array('email' => $request->email, 'password' => $request->password, 'status' => '0'))) {
-            return $this->sendResponse(trans('messages.custom.account_verify'), 0, null, $this->failedStatus);
+            return $this->sendResponse('Your Account is not Verified By Admin.', 0, null, $this->failedStatus);
         } else {
-            return $this->sendResponse(trans('messages.custom.invalid_credential'), 0, null, $this->failedStatus);
+            return $this->sendResponse('Invalid email or password.', 0, null, 401);
         }
     }
 
@@ -76,21 +77,28 @@ class AuthController extends Controller
     {
         $result = $this->userRepository->findUserByEmail($request->email);
         if ($result) {
-            // $otp = rand(1111, 9999);
-            $otp = 1111;
-            $this->userRepository->updateUser($result->id, ['otp' => $otp, 'updated_at' => now()]);
+            $token = Str::random(64);
 
-            $emailTemplate = EmailTemplate::getOtpTemplate();
-            $subject = $emailTemplate->subject;
-            $html = $emailTemplate->html;
-            $html = str_replace('{{OTP}}', $otp, $html);
-            $html = str_replace('{{USERNAME}}', $result->name, $html);
+            try {
+                DB::connection('mongodb')->collection('password_reset_tokens')->insert([
+                    'email' => $request->email,
+                    'token' => $token,
+                    'created_at' => Carbon::now()
+                ]);
 
-            Mail::to($result->email)->send(new VerifyEmail($subject, $html));
+                Mail::send('admin.email-template.forgot-password', ['token' => $token], function ($message) use ($request) {
+                    $message->to($request->email);
+                    $message->subject('Reset Password');
+                });
 
-            return $this->sendResponse(trans('messages.custom.verify_code'), 1, array(["id" => $result->id, "email" => $request->email]), $this->successStatus);
+                return $this->sendResponse('Reset password email sent. Please check you email.', 1, array(["id" => $result->id, "email" => $request->email]), $this->successStatus);
+            } catch (\Exception $e) {
+                return $this->sendResponse('Mail not sent.', 0, null, $this->failedStatus);
+            }
+
+            
         }
-        return $this->sendResponse(trans('validation.email_not_exist_error'), 0, null, $this->failedStatus);
+        return $this->sendResponse('Email not exist.', 0, null, $this->failedStatus);
     }
 
     public function resendOtp(ResentOtpApiRequest $request)
@@ -101,16 +109,9 @@ class AuthController extends Controller
             $otp = 111111;
             $this->userRepository->updateUser($result->id, ['otp' => $otp, 'is_active' => '1', 'updated_at' => now()]);
 
-            // $emailTemplate = EmailTemplate::getOtpTemplate();
-            // $subject = $emailTemplate->subject;
-            // $html = $emailTemplate->html;
-            // $html = str_replace('{{OTP}}', $otp, $html);
-            // $html = str_replace('{{USERNAME}}', $result->name, $html);
-
-            // Mail::to($result->email)->send(new VerifyEmail($subject, $html));
-            return $this->sendResponse(trans('messages.custom.resent_code'), 1, array(["id" => $result->id, "email" => $request->email]), $this->successStatus);
+            return $this->sendResponse('Verification code resent successfully.', 1, array(["id" => $result->id, "email" => $request->email]), $this->successStatus);
         }
-        return $this->sendResponse(trans('validation.email_not_exist_error'), 0, null, $this->failedStatus);
+        return $this->sendResponse('Email not exist.', 0, null, $this->notFoundStatus);
     }
 
     public function verifyOtp(VerifyOtpApiRequest $request)
@@ -124,50 +125,64 @@ class AuthController extends Controller
                     
                     $this->userRepository->updateUser($request->user_id, ["otp" => null, 'is_active' => '1']);
                 }
-                return $this->sendResponse(trans('messages.custom.otp_code'), 1, array(["id" => $result->id]), $this->successStatus);
+                return $this->sendResponse('Otp verified successfully.', 1, array(["id" => $result->id]), $this->successStatus);
             } else {
-                return $this->sendResponse(trans('messages.custom.invalid_otp'), 0, null, $this->failedStatus);
+                return $this->sendResponse('Invalid Otp.', 0, null, $this->failedStatus);
             }
         } else {
-            return $this->sendResponse(trans('validation.id_not_found_error'), 0, null, $this->failedStatus);
+            return $this->sendResponse('User not found.', 0, null, $this->notFoundStatus);
         }
     }
 
     public function resetPassword(ResetPasswordApiRequest $request)
     {
+        $updatePassword = DB::connection('mongodb')->collection('password_reset_tokens')
+            ->where('token',$request->token)
+            ->first();
+
+        if (!$updatePassword) {
+            return $this->sendResponse('Invalid token!', 0, null, $this->failedStatus);
+        } else {
+            $user = User::where('email', $updatePassword['email'])->where('user_type', 0)->first();            
+            $updateAppUser = $this->userRepository->updateUser($user->_id, ["password" => $request->new_password]);
+
+            if ($updateAppUser) {
+                DB::connection('mongodb')->collection('password_reset_tokens')->where('token',$request->token)->delete();
+                return $this->sendResponse('Password reset successfully.', 1, null, $this->successStatus);
+            }
+            return $this->sendResponse('Something went wrong.', 0, null, $this->failedStatus);
+        }
+    }
+
+    /*public function resetPassword(ResetPasswordApiRequest $request)
+    {
         $result = $this->userRepository->findUserById($request->user_id);
         if ($result) {
             $updateAppUser = $this->userRepository->updateUser($request->user_id, ["password" => $request->new_password]);
             if ($updateAppUser) {
-                return $this->sendResponse(trans(
-                    'messages.custom.reset_messages',
-                    ["attribute" => "Password"]
-                ), 1, null, $this->successStatus);
+                return $this->sendResponse('Password reset successfully.', 1, null, $this->successStatus);
             }
-            return $this->sendResponse(trans('validation.unknown_error'), 0, null, $this->failedStatus);
+            return $this->sendResponse('Something went wrong.', 0, null, $this->failedStatus);
         } else {
-            return $this->sendResponse(trans('validation.id_not_found_error'), 0, null, $this->failedStatus);
+            return $this->sendResponse('User not found.', 0, null, $this->failedStatus);
         }
-    }
+    }*/
 
     public function logOut()
     {
         $user = Auth::user();
-        $user->tokens()->delete();
+        $this->userRepository->updateUser($user->id, ["access_token" => null]);
         $update = $this->userRepository->logout($user->id);
         if ($update) {
-            return $this->sendResponse(trans(
-                'messages.custom.logout_messages',
-                ["attribute" => "User"]
-            ), 1, null, $this->successStatus);
+            return $this->sendResponse('User Log Out successfully.', 1, null, $this->successStatus);
         } else {
-            return $this->sendResponse(trans('validation.unknown_error'), 0, null, $this->failedStatus);
+            return $this->sendResponse('Something went wrong.', 0, null, $this->failedStatus);
         }
     }
 
     public function getUser(Request $request)
     {
         $data = $this->userRepository->getUserData($request);
-        return $this->sendResponse(trans('messages.custom.get_data'), 1, $data, $this->successStatus);
+        return $this->sendResponse('Get User.', 1, $data, $this->successStatus);
     }
 }

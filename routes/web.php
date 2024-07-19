@@ -18,20 +18,19 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'postLogin'])->name('login.post');
 
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
-    Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+    Route::post('forget-password-post', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
 
     Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
     Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 });
 
 // Authenticated routes
-Route::middleware('auth:web')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return redirect()->route('dashboard');
     });
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-    
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
