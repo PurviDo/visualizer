@@ -91,6 +91,30 @@
                                 </div>
                             </fieldset>
 
+                            <fieldset class="form-group floating-label-form-group not-editable">
+                                <label for="package_id">Package<span class="text-danger">*</span></label>
+                                <input type="package_id" name="package_id" class="form-control email" placeholder="Enter Email "
+                                    required>
+                                <div class="invalid-feedback font-weight-bold package_id-invalid" role="alert">
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="form-group floating-label-form-group not-editable">
+                                <label for="password">Password<span class="text-danger">*</span></label>
+                                <input type="password" name="password" class="form-control password" placeholder="Enter Password "
+                                    required>
+                                <div class="invalid-feedback font-weight-bold password-invalid" role="alert">
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="form-group floating-label-form-group not-editable">
+                                <label for="confirm_password">Confirm Password<span class="text-danger">*</span></label>
+                                <input type="password" name="confirm_password" class="form-control confirm-password" placeholder="Enter Confirm Password "
+                                    required>
+                                <div class="invalid-feedback font-weight-bold confirm-password-invalid" role="alert">
+                                </div>
+                            </fieldset>
+
                             <fieldset class="form-group text-right mb-0">
                                 <button type="reset" class="btn" data-dismiss="modal">
                                     Cancel
@@ -215,7 +239,7 @@
     });
 
     $(document).on('click', '.add-item-button', function() {
-        $('#cid').val("");                    
+        $('#cid').val(0);                    
         // Set form action to update route
         $('#primary-submit-form').attr('action', '{{ url('customers') }}/');
         $('#primary-submit-form').attr('method', 'POST');
@@ -271,6 +295,8 @@
                     $('.email').val(customer.email);
                     $('.mobile-no').val(customer.mobile_no);
                     $('#cid').val(customer._id);
+
+                    $(".not-editable").hide();
                     
                     // Set form action to update route
                     $('#primary-submit-form').attr('action', '{{ url('customers') }}/' + customer._id);
