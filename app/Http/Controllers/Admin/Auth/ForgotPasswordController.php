@@ -53,6 +53,7 @@ class ForgotPasswordController extends Controller
             $token = Str::random(64);
 
             try {
+                DB::connection('mongodb')->collection('password_reset_tokens')->where('email',$request->email)->delete();
                 DB::connection('mongodb')->collection('password_reset_tokens')->insert([
                     'email' => $request->email,
                     'token' => $token,
