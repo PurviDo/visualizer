@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Traits\ApiResponseTrait;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -50,5 +52,65 @@ class AuthController extends Controller
         Auth::logout();
 
         return Redirect('/');
+    }
+    
+    public function showProfile() : View
+    {
+        return view('admin.auth.showProfile');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|min:2',
+            'last_name' => 'required|string|min:2',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore(Auth::id(),'_id')
+            ],
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()->toArray()
+            ], 422);
+        }
+
+        $user = User::find(Auth::id());
+        $data['first_name'] = $request->first_name;
+        $data['last_name'] = $request->last_name;
+        $data['email'] = $request->email;
+        $user->update($data);            
+
+        return response()->json(['success' => 'Profile updated successfully.']);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $validator = [
+            'current_password' => ['required', function ($attribute, $value, $fail) {
+                if (!Hash::check($value, Auth::user()->password)) {
+                    $fail('The current password is incorrect.');
+                }
+            }],
+            'password' => 'required|min:5',
+        ];
+        $validator = Validator::make($request->all(), $validator);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()->toArray()
+            ], 422);
+        }
+        User::find(Auth::id())->update([
+            'password' => Hash::make($request->password)
+        ]);
+    
+        return response()->json(['success' => 'Password changed successfully.']);
     }
 }
