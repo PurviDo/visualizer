@@ -26,10 +26,6 @@ Route::middleware('guest')->group(function () {
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('dashboard');
-    });
-
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('show-profile', [AuthController::class, 'showProfile'])->name('show.profile');
     Route::post('update-profile', [AuthController::class, 'updateProfile'])->name('update.profile');
@@ -52,4 +48,8 @@ Route::middleware('auth')->group(function () {
 
     //PACKAGE 
     Route::resource('packages', PackageController::class);
+
+    Route::get('/', function () {
+        return redirect()->route('category.index');
+    });
 });
