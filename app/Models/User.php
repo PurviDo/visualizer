@@ -65,4 +65,9 @@ class User extends Authenticatable
         $updateOtp->update(['otp' => $otp]);
         return $updateOtp;
     }
+
+    public function linkedSocialAccounts()
+    {
+        return $this->hasMany(LinkedSocialAccount::class);
+    }
 }

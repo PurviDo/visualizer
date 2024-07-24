@@ -10,9 +10,13 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\v1'], function ($api) {
     $api->post('resend-otp', 'AuthController@resendOtp');
     $api->post('verify-otp', 'AuthController@verifyOtp');
     $api->post('reset-password', 'AuthController@resetPassword');
+    $api->post('social-login', 'SocialLoginController@login');
+
 
     Route::group(['middleware' => ['auth:sanctum', 'verified']], function ($auth) {
         $auth->post('logout', 'AuthController@logOut');
+        $auth->post('change-password', 'AuthController@changePassword');
+        $auth->post('profile-update', 'AuthController@profileUpdate');
         $auth->get('get-user', 'AuthController@getUser');
     });
 });
