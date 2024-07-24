@@ -9,7 +9,7 @@
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
     <!-- Navbar Search -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
       <a class="nav-link" data-widget="navbar-search" href="#" role="button">
         <i class="fas fa-search"></i>
       </a>
@@ -29,23 +29,20 @@
         </form>
       </div>
     </li>
-
-
-
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
       </a>
-    </li>
+    </li> -->
 
     <li class="nav-item dropdown">
       <a class="nav-link" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" href="#">
         <i class="far fa-user"></i>
       </a>
       <div class="dropdown-menu">
-        <a class="dropdown-item" href="{{route('show.profile')}}">
+        <!-- <a class="dropdown-item" href="{{route('show.profile')}}">
           <i class="far fa-edit"></i> Profile
-        </a>
+        </a> -->
         <!-- <div class="dropdown-divider"></div>
         <a class="nav-link" href="{{route('change.password')}}">
           <i class="far fa-edit"></i>  Change Password
@@ -56,11 +53,5 @@
         </a>
       </div>
     </li>
-
-    <!-- <li class="nav-item dropdown">
-        <a class="nav-link" href="{{route('logout')}}">
-          <i class="far fa-arrow-alt-circle-right"></i>
-        </a>
-      </li> -->
   </ul>
 </nav>

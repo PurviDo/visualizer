@@ -8,14 +8,14 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           <img src="adminlte/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">Alexander Pierce</a>
         </div>
-      </div>
+      </div> -->
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -24,7 +24,7 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
             <ul class="nav nav-treeview">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="{{route('dashboard')}}" class="nav-link {{ Route::is('dashboard') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>
@@ -40,7 +40,7 @@
                     Users
                   </p>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="{{route('category.index')}}" class="nav-link {{ Route::is('category.index') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-th"></i>
@@ -49,7 +49,7 @@
                   </p>
                 </a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="{{route('sub-category.index')}}" class="nav-link {{ Route::is('sub-category.index') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
@@ -89,6 +89,7 @@
                   </p>
                 </a>
               </li>
+              </li> -->
             </ul>
           </li>
 
