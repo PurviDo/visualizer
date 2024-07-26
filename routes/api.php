@@ -13,7 +13,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\v1'], function ($api) {
     $api->post('verify-otp', 'AuthController@verifyOtp');
     $api->post('reset-password', 'AuthController@resetPassword');
     $api->post('social-login', 'SocialLoginController@login');
-    // $api->post('change-password', 'AuthController@changePassword');
 
     Route::group(['middleware' => ['auth:sanctum']], function ($auth) {
         $auth->post('change-password', 'AuthController@changePassword');
