@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AuthController;
+use Illuminate\Routing\Route as RoutingRoute;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'App\Http\Controllers\Api\v1'], function ($api) {
@@ -11,12 +13,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\v1'], function ($api) {
     $api->post('verify-otp', 'AuthController@verifyOtp');
     $api->post('reset-password', 'AuthController@resetPassword');
     $api->post('social-login', 'SocialLoginController@login');
+    // $api->post('change-password', 'AuthController@changePassword');
 
-
-    Route::group(['middleware' => ['auth:sanctum', 'verified']], function ($auth) {
-        $auth->post('logout', 'AuthController@logOut');
+    Route::group(['middleware' => ['auth:sanctum']], function ($auth) {
         $auth->post('change-password', 'AuthController@changePassword');
         $auth->post('profile-update', 'AuthController@profileUpdate');
-        $auth->get('get-user', 'AuthController@getUser');
+        $auth->post('logout', 'AuthController@logOut');
     });
 });
