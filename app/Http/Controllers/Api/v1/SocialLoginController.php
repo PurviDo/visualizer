@@ -36,7 +36,7 @@ class SocialLoginController extends Controller
         auth()->login($user);
 
         if (auth()->check()) {
-            $token = Helper::createToken();
+            $token = Auth::user()->createToken(time())->plainTextToken;
             $user->access_token = $token;
             $user->save();
 
