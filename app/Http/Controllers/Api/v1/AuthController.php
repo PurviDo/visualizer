@@ -20,6 +20,8 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 use App\Helpers\Helper;
+use App\Http\Requests\ChangePasswordApiRequest;
+use App\Http\Requests\ProfileUpdateApiRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +29,7 @@ use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\HasApiTokens;
 
 class AuthController extends Controller
@@ -59,11 +62,11 @@ class AuthController extends Controller
         $credentials['user_type'] = 0;
         $credentials['deleted_at'] = null;
         $credentials['is_active'] = "1";
-        
-        if (Auth::attempt($credentials)) {
 
-            $user = Auth::user();            
-            $user['access_token'] = Helper::createToken();
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            // $user['access_token'] = Helper::createToken();
+            $user['access_token'] = $user->createToken(time())->plainTextToken;
             $this->userRepository->updateUser($user->id, ["access_token" => $user['access_token']]);
 
             return $this->sendResponse('User Logged In successfully.', 1, $user, $this->successStatus);
@@ -97,8 +100,6 @@ class AuthController extends Controller
             } catch (\Exception $e) {
                 return $this->sendResponse('Mail not sent.', 0, null, $this->failedStatus);
             }
-
-            
         }
         return $this->sendResponse('Email not exist.', 0, null, $this->failedStatus);
     }
@@ -119,12 +120,12 @@ class AuthController extends Controller
     public function verifyOtp(VerifyOtpApiRequest $request)
     {
         $result = $this->userRepository->findUserById($request->user_id);
-        
+
         if ($result) {
             //use 111111 code for verify otp
             if ($request->otp == $result->otp) {
                 if ($request->otp == $result->otp) {
-                    
+
                     $this->userRepository->updateUser($request->user_id, ["otp" => null, 'is_active' => '1']);
                 }
                 return $this->sendResponse('Otp verified successfully.', 1, array(["id" => $result->id]), $this->successStatus);
@@ -139,17 +140,17 @@ class AuthController extends Controller
     public function resetPassword(ResetPasswordApiRequest $request)
     {
         $updatePassword = DB::connection('mongodb')->collection('password_reset_tokens')
-            ->where('token',$request->token)
+            ->where('token', $request->token)
             ->first();
 
         if (!$updatePassword) {
             return $this->sendResponse('Invalid token!', 0, null, $this->failedStatus);
         } else {
-            $user = User::where('email', $updatePassword['email'])->where('user_type', 0)->first();            
+            $user = User::where('email', $updatePassword['email'])->where('user_type', 0)->first();
             $updateAppUser = $this->userRepository->updateUser($user->_id, ["password" => $request->new_password]);
 
             if ($updateAppUser) {
-                DB::connection('mongodb')->collection('password_reset_tokens')->where('token',$request->token)->delete();
+                DB::connection('mongodb')->collection('password_reset_tokens')->where('token', $request->token)->delete();
                 return $this->sendResponse('Password reset successfully.', 1, null, $this->successStatus);
             }
             return $this->sendResponse('Something went wrong.', 0, null, $this->failedStatus);
@@ -173,18 +174,36 @@ class AuthController extends Controller
     public function logOut()
     {
         $user = Auth::user();
-        $this->userRepository->updateUser($user->id, ["access_token" => null]);
-        $update = $this->userRepository->logout($user->id);
-        if ($update) {
-            return $this->sendResponse('User Log Out successfully.', 1, null, $this->successStatus);
-        } else {
-            return $this->sendResponse('Something went wrong.', 0, null, $this->failedStatus);
-        }
+        // $this->userRepository->updateUser($user->id, ["access_token" => null]);
+        $user->currentAccessToken()->delete();
+        return $this->sendResponse('User Log Out successfully.', 1, null, $this->successStatus);
     }
 
-    public function getUser(Request $request)
+    public function changePassword(ChangePasswordApiRequest $request)
     {
-        $data = $this->userRepository->getUserData($request);
-        return $this->sendResponse('Get User.', 1, $data, $this->successStatus);
+        $user = User::find(Auth::id());
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['current_password' => 'Current password is incorrect.']
+            ], 400);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return $this->sendResponse('Password changed successfully.', 1, null, $this->successStatus);
+    }
+
+    public function profileUpdate(ProfileUpdateApiRequest $request)
+    {
+        $user = User::find(Auth::id());
+        $data['first_name'] = $request->first_name;
+        $data['last_name'] = $request->last_name;
+        $data['email'] = $request->email;
+        $user->update($data);
+
+        return $this->sendResponse('Profile updated successfully.', 1, $user, $this->successStatus);
     }
 }
