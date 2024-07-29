@@ -1,3 +1,7 @@
 .login-box {
     width: auto !important;
 }
+
+.dropdown-menu {
+    min-width: 15rem !important;
+}

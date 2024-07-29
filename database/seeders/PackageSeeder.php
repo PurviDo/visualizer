@@ -17,33 +17,27 @@ class PackageSeeder extends Seeder
     {
         Package::truncate();
         Package::create([
-            'name' => 'Basic Free Package',
+            'name' => 'Free',
             'duration' => 6,
-            'description' => 'A basic package for beginners',
+            'tagline' => 'In the Free plan you get access to',
+            'description' => '',
             'credits' => 10,
+            'price_per_image' => 00.00,
             'actual_price' => 00.00,
             'discounted_price' => 00.00,
             'status' => 'Active',
         ]);
 
         Package::create([
-            'name' => 'Standard Package',
+            'name' => 'Bronze',
             'duration' => 6,
-            'description' => 'A standard package for intermediate users',
-            'credits' => 20,
-            'actual_price' => 180.00,
-            'discounted_price' => 160.00,
+            'tagline' => 'In the Bronze plan you get access to',
+            'description' => '',
+            'credits' => 100,
+            'price_per_image' => 50.00,
+            'actual_price' => 5000.00,
+            'discounted_price' => 5000.00,
             'status' => 'Active',
-        ]);
-
-        Package::create([
-            'name' => 'Premium Package',
-            'duration' => 6,
-            'description' => 'A premium package for advanced users',
-            'credits' => 50,
-            'actual_price' => 300.00,
-            'discounted_price' => 270.00,
-            'status' => 'Inactive',
         ]);
     }
 }

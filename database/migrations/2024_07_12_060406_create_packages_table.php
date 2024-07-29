@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $collection) {
             $collection->increments('id');
             $collection->string('name');
+            $collection->text('tagline');
             $collection->integer('duration'); 
-            $collection->string('description');
+            $collection->longtext('description');
             $collection->integer('credits');
+            $collection->decimal('price_per_image', 8, 2);
             $collection->decimal('actual_price', 8, 2);
             $collection->decimal('discounted_price', 8, 2);
             $collection->string('status'); 

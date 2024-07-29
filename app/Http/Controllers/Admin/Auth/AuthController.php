@@ -59,11 +59,17 @@ class AuthController extends Controller
         return view('admin.auth.showProfile');
     }
 
+    public function showChangePassword() : View
+    {
+        return view('admin.auth.changePassword');
+    }
+
     public function updateProfile(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|min:2',
             'last_name' => 'required|string|min:2',
+            'mobile_no'  => 'required|string|min:9|max:10|nullable|regex:/[0-9]{9}/',
             'email' => [
                 'required',
                 'string',
@@ -84,6 +90,7 @@ class AuthController extends Controller
         $data['first_name'] = $request->first_name;
         $data['last_name'] = $request->last_name;
         $data['email'] = $request->email;
+        $data['mobile_no'] = $request->mobile_no;
         $user->update($data);            
 
         return response()->json(['success' => 'Profile updated successfully.']);

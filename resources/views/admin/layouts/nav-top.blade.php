@@ -40,13 +40,13 @@
         <i class="far fa-user"></i>
       </a>
       <div class="dropdown-menu">
-        <!-- <a class="dropdown-item" href="{{route('show.profile')}}">
-          <i class="far fa-edit"></i> Profile
-        </a> -->
-        <!-- <div class="dropdown-divider"></div>
-        <a class="nav-link" href="{{route('change.password')}}">
-          <i class="far fa-edit"></i>  Change Password
-        </a> -->
+        <a class="dropdown-item" href="{{route('show.profile')}}">
+          <i class="far fa-user"></i> My Profile
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="nav-link" href="{{route('show.changePassword')}}">
+          <i class="fas fa-key"></i>  Change Password
+        </a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{{route('logout')}}">
           <i class="far fa-arrow-alt-circle-right"></i>  Logout
