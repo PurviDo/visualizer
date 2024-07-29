@@ -1,8 +1,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{route('dashboard')}}" class="brand-link">
-      <img src="{{ asset('/assets/images/logo/logo.png')}}" alt="Visualizer" class="brand-image" style="opacity: .8">
-      <span class="brand-text font-weight-light">Visualizer</span>
+      <img src="{{ asset('/assets/images/logo/logo.png')}}" alt="CamClo3D" class="brand-image" style="opacity: .8">
+      <span class="brand-text font-weight-light">CamClo3D</span>
     </a>
 
     <!-- Sidebar -->
@@ -58,7 +58,7 @@
                 </a>
               </li>               -->
               <li class="nav-item">
-                <a href="/packages" class="nav-link">
+                <a href="{{route('packages.index')}}" class="nav-link {{ Route::is('packages.index') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-cube"></i>
                   <p>
                     Packages
@@ -73,13 +73,53 @@
                   </p>
                 </a>
               </li> -->
-              <li class="nav-item">
-                <a href="/cms_mg" class="nav-link">
+              <li class="nav-item {{ (Route::is('aboutus') || Route::is('contactus') || Route::is('termsconditions') || Route::is('privacypolicy') || Route::is('faqsection') || Route::is('faqs')) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-book"></i>
                   <p>
                     CMS Management
+                    <i class="fas fa-angle-left right"></i>
                   </p>
                 </a>
+
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{route('aboutus')}}" class="nav-link {{ Route::is('aboutus') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>About Us</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('contactus')}}" class="nav-link {{ Route::is('contactus') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Contact Us</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('termsconditions')}}" class="nav-link {{ Route::is('termsconditions') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Terms & Conditions</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('privacypolicy')}}" class="nav-link {{ Route::is('privacypolicy') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Privacy Policy</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('faqsection')}}" class="nav-link {{ Route::is('faqsection') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>FAQs Sections</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('faqs')}}" class="nav-link {{ Route::is('faqs') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>FAQs Question & Answers</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
               </li>
             </ul>

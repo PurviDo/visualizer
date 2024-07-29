@@ -15,7 +15,7 @@
       </div>
       @endsession
       <div class="input-group mb-1">
-        <input name="email" type="email" value="admin@visualizer.com" class="form-control" placeholder="Email">
+        <input name="email" type="email" value="admin@example.com" class="form-control" placeholder="Email">
         <div class="input-group-append">
           <div class="input-group-text">
             <span class="fas fa-envelope"></span>

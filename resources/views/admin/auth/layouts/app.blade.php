@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Visualizer | Log in</title>
+  <title>CamClo3D | Log in</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -17,11 +17,11 @@
 <body class="hold-transition login-page">
 <div class="login-box">
 <div class="login-logo">
-            <img src="{{ asset('/assets/images/logo/logo.png')}}" alt="Visualizer" class="brand-image" style="opacity: .8" width="150">
+            <img src="{{ asset('/assets/images/logo/logo.png')}}" alt="CamClo3D" class="brand-image" style="opacity: .8" width="150">
         </div>
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="" class="h1"><b>Visualizer</b> Admin</a>
+      <a href="" class="h1"><b>CamClo3D</b> Admin</a>
     </div>
     @yield('content')
     </div>

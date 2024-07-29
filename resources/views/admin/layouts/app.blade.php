@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Visualizer Admin</title>
+  <title>CamClo3D Admin</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -106,8 +106,8 @@
   <script src="{{ asset('adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
   <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
   
-  <!-- custom css -->
-  <link rel="stylesheet" href="{{ asset('/assets/js/visualizer.js')}}">
+  <!-- custom js -->
+  <script src="{{ asset('/assets/js/visualizer.js')}}"></script>
   <script>
       $.ajaxSetup({
           headers: {
