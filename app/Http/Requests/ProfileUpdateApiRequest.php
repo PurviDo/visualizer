@@ -30,6 +30,7 @@ class ProfileUpdateApiRequest extends FormRequest
         return [
             'first_name'    => 'required|string|min:2',
             'last_name'     => 'required|string|min:2',
+            'phone_number'  => 'required|string|min:9|max:10|nullable|regex:/[0-9]{9}/',
             'email'         => [
                                 'required',
                                 'string',

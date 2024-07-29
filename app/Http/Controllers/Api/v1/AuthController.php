@@ -202,8 +202,15 @@ class AuthController extends Controller
         $data['first_name'] = $request->first_name;
         $data['last_name'] = $request->last_name;
         $data['email'] = $request->email;
+        $data['mobile_no'] = $request->phone_number;
         $user->update($data);
 
         return $this->sendResponse('Profile updated successfully.', 1, $user, $this->successStatus);
+    }
+
+    public function userProfile(Request $request)
+    {
+        $data = $this->userRepository->getUserData($request);
+        return $this->sendResponse('My Profile details', 1, $data, $this->successStatus);
     }
 }
