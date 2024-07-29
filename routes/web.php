@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\CMSController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () {
@@ -41,7 +42,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/template_mg', [DashboardController::class, 'index'])->name('dashboard');
 
     // CMS Management
-    Route::get('/cms_mg', [CMSController::class, 'index'])->name('dashboard');
+    Route::get('/about-us', [CMSController::class, 'aboutUs'])->name('aboutus');
+    Route::get('/contact-us', [CMSController::class, 'contactUs'])->name('contactus');
+    Route::get('/terms-conditions', [CMSController::class, 'termsConditions'])->name('termsconditions');
+    Route::get('/privacy-policy', [CMSController::class, 'privacyPolicy'])->name('privacypolicy');
+    Route::get('/faq-section', [CMSController::class, 'faqSection'])->name('faqsection');
+    Route::get('/faqs', [CMSController::class, 'faqsDetails'])->name('faqs');
 
     //CATEGORY
     Route::resource('category', CategoryController::class);

@@ -8,8 +8,33 @@ use DB;
 
 class CMSController extends Controller
 {
-    public function index()
+    public function aboutUs()
     {
-        return view('admin.index');
+        return view('admin.cms.aboutus');
+    }
+
+    public function contactUs()
+    {
+        return view('admin.cms.aboutus');
+    }
+
+    public function termsConditions()
+    {
+        return view('admin.cms.termsconditions');
+    }
+
+    public function privacyPolicy()
+    {
+        return view('admin.cms.privacypolicy');
+    }
+
+    public function faqSection()
+    {
+        return view('admin.cms.aboutus');
+    }
+    
+    public function faqsDetails()
+    {
+        return view('admin.cms.aboutus');
     }
 }
