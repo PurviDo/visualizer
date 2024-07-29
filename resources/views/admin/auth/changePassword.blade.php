@@ -4,12 +4,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">My Profile</h1>
+                <h1 class="m-0">Change Password</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                    <li class="breadcrumb-item active">Profile</li>
+                    <li class="breadcrumb-item active">Change Password</li>
                 </ol>
             </div>
         </div>
@@ -22,28 +22,28 @@
                 <div class="card">
                     <div class="card-body">
                         <div id="alert-container"></div>
-                        <form id="profileForm" action="{{ route('update.profile') }}" method="POST">
-                            <div class="card-body">
+                        <form id="change-password-form" method="POST" action="{{ route('change.password') }}">
+                            <div class="modal-body">
                                 <div class="form-group">
-                                    <label for="firstname">First Name<span class="text-danger">*</span></label>
-                                    <input type="text" name="first_name" value="{{auth()->user()->first_name}}" class="form-control" id="firstname" placeholder="Enter First name" required>
+                                    <label for="current_password">Current Password<span class="text-danger">*</span></label>
+                                    <input type="password" name="current_password" id="current_password" class="form-control" placeholder="Enter Current Password" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lastname">Last Name<span class="text-danger">*</span></label>
-                                    <input type="text" name="last_name" value="{{auth()->user()->last_name}}" class="form-control" id="lastname" placeholder="Enter Last name" required>
+                                    <label for="password">New Password<span class="text-danger">*</span></label>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter New Password" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email address<span class="text-danger">*</span></label>
-                                    <input type="email" name="email" value="{{auth()->user()->email}}" class="form-control" id="email" placeholder="Enter email" required>
+                                    <label for="confirm_password">Confirm New Password<span class="text-danger">*</span></label>
+                                    <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Enter Confirm New Password" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="mobile_no">Mobile No.<span class="text-danger">*</span></label>
-                                    <input type="tel" name="mobile_no" value="{{auth()->user()->mobile_no}}" class="form-control" id="mobile_no" placeholder="Enter Mobile No." required>
+                                    <button type="reset" class="btn" data-dismiss="modal">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        Change Password
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="{{route('dashboard')}}" class="btn">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -123,6 +123,48 @@
             }
         });
 
+        $('#change-password-form').validate({
+            rules: {
+                current_password: {
+                    required: true,
+                },
+                password: {
+                    required: true,
+                    minlength: 5
+                },
+                confirm_password: {
+                    required: true,
+                    minlength: 5,
+                    equalTo: "#password"
+                },
+            },
+            messages: {
+                current_password: {
+                    required: "Please enter your current password"
+                },
+                password: {
+                    required: "Please enter a new password",
+                    minlength: "Your password must be at least 5 characters long"
+                },
+                confirm_password: {
+                    required: "Please confirm your new password",
+                    minlength: "Your password must be at least 5 characters long",
+                    equalTo: "New passwords do not match"
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
         function createAlertHtml(message, type = 'success') {
             return `
                 <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -154,6 +196,33 @@
                         element.closest('.form-group').find('.invalid-feedback').remove();
                         element.closest('.form-group').append(`<span class="invalid-feedback">${value[0]}</span>`);
                     });
+                }
+            });
+        }
+
+        function changePassword() {
+            $.ajax({
+                url: "{{ route('change.password') }}",
+                method: "POST",
+                data: $('#change-password-form').serialize(),
+                success: function(response) {
+                    const alertHtml = createAlertHtml(response.success);
+                    $('#alert-container').html(alertHtml);
+                    setTimeout(function() {
+                        $('.alert').alert('close');
+                    }, 5000);
+                    $('#changePasswordModal').modal('hide');
+                },
+                error: function(response) {
+                    // Handling validation errors
+                    const errors = response.responseJSON.errors;
+                    $.each(errors, function(key, value) {
+                        const element = $(`[name=${key}]`);
+                        element.addClass('is-invalid');
+                        element.closest('.form-group').find('.invalid-feedback').remove();
+                        element.closest('.form-group').append(`<span class="invalid-feedback">${value[0]}</span>`);
+                    });
+
                 }
             });
         }

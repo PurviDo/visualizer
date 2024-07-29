@@ -44,10 +44,12 @@ class PackageController extends Controller
                 Rule::unique('packages')->ignore($id, '_id'),
             ],
             'duration' => 'required|integer|min:1',
+            'tagline' => 'required|string',
             'description' => 'required|string',
             'credits' => 'required|integer|min:0',
+            'price_per_image' => 'required|numeric|min:0',
             'actual_price' => 'required|numeric|min:0',
-            'discounted_price' => 'nullable|numeric|min:0|lt:actual_price',
+            'discounted_price' => 'nullable|numeric|min:0',
             'status' => 'required|in:Active,Inactive',
         ];
 
@@ -71,8 +73,10 @@ class PackageController extends Controller
 
         $package->name = $request->name;
         $package->duration = $request->duration;
+        $package->tagline = $request->tagline;
         $package->description = $request->description;
         $package->credits = $request->credits;
+        $package->price_per_image = $request->price_per_image;
         $package->actual_price = $request->actual_price;
         $package->discounted_price = $request->discounted_price;
         $package->status = $request->status;

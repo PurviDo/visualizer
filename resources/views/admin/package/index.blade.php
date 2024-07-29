@@ -1,5 +1,10 @@
 @extends('admin.layouts.app')
 
+@section('style')
+    <!-- summernote -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/summernote/summernote-bs4.min.css') }}">
+@endsection
+
 @section('content')
     <div class="content-header">
         <div class="container-fluid">
@@ -49,19 +54,8 @@
         </div>
         <div class="modal fade text-left drawer-right package-modal" id="bootstrap" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel35" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    {{-- <div class="form-overlay category-loading">
-                        <h3>
-                            <center>
-                                <div class="spinner-border text-primary" role="status" style="height: 45px; width:45px;">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </center>
-                            <br>
-                            Loading... Please Wait
-                        </h3>
-                    </div> --}}
                     <div class="modal-header">
                         <h3 class="modal-title"></h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -71,72 +65,89 @@
                     <form id="package-form" action="{{ route('packages.store') }}">
                         <input type="hidden" name="id" value="0" class="id">
                         <div class="modal-body">
-                            <fieldset class="form-group floating-label-form-group">
-                                <label for="name">Package Name <span class="text-danger">*</span></label>
-                                <input type="text" name="name" class="form-control name"
-                                    placeholder="Enter package name" required>
-                                <div class="invalid-feedback font-weight-bold name-invalid" role="alert"></div>
-                            </fieldset>
+                            <div class="row">
+                                <fieldset class="form-group floating-label-form-group col-6">
+                                    <label for="name">Package Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" class="form-control name"
+                                        placeholder="Enter package name" required>
+                                    <div class="invalid-feedback font-weight-bold name-invalid" role="alert"></div>
+                                </fieldset>
 
-                            <fieldset class="form-group floating-label-form-group">
-                                <label for="duration">Package Duration (In month) <span class="text-danger">*</span></label>
-                                <input type="number" name="duration" class="form-control duration"
-                                    placeholder="Enter Package Duration (In month)" required>
-                                <div class="invalid-feedback font-weight-bold duration-invalid" role="alert">
-                                </div>
-                            </fieldset>
+                                <fieldset class="form-group floating-label-form-group col-6">
+                                    <label for="duration">Package Duration (In month) <span class="text-danger">*</span></label>
+                                    <input type="number" name="duration" class="form-control duration"
+                                        placeholder="Enter Package Duration (In month)" required>
+                                    <div class="invalid-feedback font-weight-bold duration-invalid" role="alert">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="form-group floating-label-form-group col-12">
+                                    <label for="tagline">Tagline <span class="text-danger">*</span></label>
+                                    <textarea name="tagline" class="form-control tagline" placeholder="Enter Tagline" required></textarea>
+                                    <div class="invalid-feedback font-weight-bold tagline-invalid" role="alert">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="form-group floating-label-form-group col-12">
+                                    <label for="description">Description <span class="text-danger">*</span></label>
+                                    <textarea name="description" class="form-control description" id="description" placeholder="Enter Description" required></textarea>
+                                    <div class="invalid-feedback font-weight-bold description-invalid" role="alert">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="form-group floating-label-form-group col-6">
+                                    <label for="credits">No of Credit <span class="text-danger">*</span></label>
+                                    <input type="number" name="credits" class="form-control credits"
+                                        placeholder="Enter No of Credit" required>
+                                    <div class="invalid-feedback font-weight-bold credits-invalid" role="alert">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="form-group floating-label-form-group col-6">
+                                    <label for="price_per_image">Price Per Image <span class="text-danger">*</span></label>
+                                    <input type="digit" name="price_per_image" class="form-control price_per_image"
+                                        placeholder="Enter Price Per Image" required>
+                                    <div class="invalid-feedback font-weight-bold price_per_image-invalid" role="alert">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="form-group floating-label-form-group col-6">
+                                    <label for="actual_price">Actual Price <span class="text-danger">*</span></label>
+                                    <input type="digit" name="actual_price" class="form-control actual_price"
+                                        placeholder="Enter Actual Price" required>
+                                    <div class="invalid-feedback font-weight-bold actual_price-invalid" role="alert">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="form-group floating-label-form-group col-6">
+                                    <label for="discounted_price">Discounted Price</label>
+                                    <input type="digit" name="discounted_price" class="form-control discounted_price"
+                                        placeholder="Enter Discounted Price">
+                                    <div class="invalid-feedback font-weight-bold discounted_price-invalid" role="alert">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="form-group floating-label-form-group col-6">
+                                    <label for="status">Status <span class="text-danger">*</span></label>
+                                    <select name="status" class="form-control status" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                    <div class="invalid-feedback font-weight-bold status-invalid" role="alert">
+                                    </div>
+                                </fieldset>
 
 
-                            <fieldset class="form-group floating-label-form-group">
-                                <label for="description">Description <span class="text-danger">*</span></label>
-                                <textarea name="description" class="form-control description" placeholder="Enter Description" required></textarea>
-                                <div class="invalid-feedback font-weight-bold description-invalid" role="alert">
-                                </div>
-                            </fieldset>
-
-                            <fieldset class="form-group floating-label-form-group">
-                                <label for="credits">No of Credit <span class="text-danger">*</span></label>
-                                <input type="number" name="credits" class="form-control credits"
-                                    placeholder="Enter No of Credit" required>
-                                <div class="invalid-feedback font-weight-bold credits-invalid" role="alert">
-                                </div>
-                            </fieldset>
-
-                            <fieldset class="form-group floating-label-form-group">
-                                <label for="actual_price">Actual Price <span class="text-danger">*</span></label>
-                                <input type="digit" name="actual_price" class="form-control actual_price"
-                                    placeholder="Enter Actual Price" required>
-                                <div class="invalid-feedback font-weight-bold actual_price-invalid" role="alert">
-                                </div>
-                            </fieldset>
-
-                            <fieldset class="form-group floating-label-form-group">
-                                <label for="discounted_price">Discounted Price</label>
-                                <input type="digit" name="discounted_price" class="form-control discounted_price"
-                                    placeholder="Enter Discounted Price">
-                                <div class="invalid-feedback font-weight-bold discounted_price-invalid" role="alert">
-                                </div>
-                            </fieldset>
-
-                            <fieldset class="form-group floating-label-form-group">
-                                <label for="status">Status <span class="text-danger">*</span></label>
-                                <select name="status" class="form-control status" required>
-                                    <option value="">Select Status</option>
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                                <div class="invalid-feedback font-weight-bold status-invalid" role="alert">
-                                </div>
-                            </fieldset>
-
-                            <fieldset class="form-group text-right mb-0">
-                                <button type="reset" class="btn" data-dismiss="modal">
-                                    Cancel
-                                </button>
-                                <button type="submit" class="btn btn-primary">
-                                    Save
-                                </button>
-                            </fieldset>
+                                <fieldset class="form-group text-right mb-0 col-12">
+                                    <button type="reset" class="btn" data-dismiss="modal">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        Save
+                                    </button>
+                                </fieldset>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -145,7 +156,7 @@
 
         <div class="modal fade text-left drawer-right show-package-modal" id="bootstrap" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel35" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title">Package Details</h3>
@@ -154,44 +165,56 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="name">Package Name:</label>
-                            <p id="package-name" class="form-control-plaintext "></p>
-                        </div>
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <label for="name">Package Name:</label>
+                                <p id="package-name" class="form-control-plaintext "></p>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="duration">Package Duration (In months):</label>
-                            <p id="package-duration" class="form-control-plaintext "></p>
-                        </div>
+                            <div class="form-group col-6">
+                                <label for="duration">Package Duration (In months):</label>
+                                <p id="package-duration" class="form-control-plaintext "></p>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="description">Description:</label>
-                            <p id="package-description" class="form-control-plaintext "></p>
-                        </div>
+                            <div class="form-group col-12">
+                                <label for="tagline">Tagline:</label>
+                                <p id="package-tagline" class="form-control-plaintext "></p>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="credits">No of Credits:</label>
-                            <p id="package-credits" class="form-control-plaintext "></p>
-                        </div>
+                            <div class="form-group col-12">
+                                <label for="description">Description:</label>
+                                <p id="package-description" class="form-control-plaintext "></p>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="actual_price">Actual Price:</label>
-                            <p id="package-actual-price" class="form-control-plaintext "></p>
-                        </div>
+                            <div class="form-group col-6">
+                                <label for="credits">No of Credits:</label>
+                                <p id="package-credits" class="form-control-plaintext "></p>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="discounted_price">Discounted Price:</label>
-                            <p id="package-discounted-price" class="form-control-plaintext "></p>
-                        </div>
+                            <div class="form-group col-6">
+                                <label for="price_per_image">Price per Image:</label>
+                                <p id="package-price_per_image" class="form-control-plaintext "></p>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="status">Status:</label>
-                            <p id="package-status" class="form-control-plaintext status"></p>
-                        </div>
+                            <div class="form-group col-6">
+                                <label for="actual_price">Actual Price:</label>
+                                <p id="package-actual-price" class="form-control-plaintext "></p>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="no_of_users">No of Users:</label>
-                            <p id="package-no-of-users" class="form-control-plaintext "></p>
+                            <div class="form-group col-6">
+                                <label for="discounted_price">Discounted Price:</label>
+                                <p id="package-discounted-price" class="form-control-plaintext "></p>
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label for="status">Status:</label>
+                                <p id="package-status" class="form-control-plaintext status"></p>
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label for="no_of_users">No of Users:</label>
+                                <p id="package-no-of-users" class="form-control-plaintext "></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -200,15 +223,11 @@
 
     </section>
 @endsection
+
 @section('script')
+
     <script>
         $(document).ready(function() {
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
 
             $('#data-table').DataTable({
                 processing: true,
@@ -260,6 +279,18 @@
             });
         });
 
+        $("#description").summernote({
+            toolbar: [
+                // [groupName, [list of button]]
+                ["style", ["bold", "italic", "underline", "clear"]],
+                ["fontsize", ["fontsize"]],
+                ["color", ["color"]],
+                ["para", ["ul", "ol", "paragraph"]],
+                ["height", ["height"]],
+            ],
+            height: 300
+        });
+
         $(document).on('click', '.add-package', function() {
             modalShow('.package-modal');
             $('.modal-title').html("Add Package");
@@ -275,9 +306,11 @@
                     if (response.success) {
                         var package = response.data;
                         $('#package-name').text(package.name);
+                        $('#package-tagline').text(package.tagline);
                         $('#package-duration').text(package.duration);
-                        $('#package-description').text(package.description);
+                        $('#package-description').html(package.description);
                         $('#package-credits').text(package.credits);
+                        $('#package-price_per_image').text(package.price_per_image);
                         $('#package-actual-price').text(package.actual_price);
                         $('#package-discounted-price').text(package.discounted_price);
                         $('#package-no-of-users').text(package.no_of_users);
@@ -310,9 +343,12 @@
 
                         $('.id').val(package._id);
                         $('.name').val(package.name);
+                        $('.tagline').val(package.tagline);
                         $('.duration').val(package.duration);
-                        $('.description').val(package.description);
+                        //$('.description').val(package.description);
+                        $(".description").summernote("code", package.description);
                         $('.credits').val(package.credits);
+                        $('.price_per_image').val(package.price_per_image);
                         $('.actual_price').val(package.actual_price);
                         $('.discounted_price').val(package.discounted_price);
                         $('.status').val(package.status);
@@ -373,12 +409,20 @@
                     invalidClass: 'duration-invalid'
                 },
                 {
+                    name: 'tagline',
+                    invalidClass: 'tagline-invalid'
+                },
+                {
                     name: 'description',
                     invalidClass: 'description-invalid'
                 },
                 {
                     name: 'credits',
                     invalidClass: 'credits-invalid'
+                },
+                {
+                    name: 'price_per_image',
+                    invalidClass: 'price_per_image-invalid'
                 },
                 {
                     name: 'actual_price',

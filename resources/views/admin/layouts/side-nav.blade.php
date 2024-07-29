@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="{{route('dashboard')}}" class="brand-link">
       <img src="{{ asset('/assets/images/logo/logo.png')}}" alt="Visualizer" class="brand-image" style="opacity: .8">
       <span class="brand-text font-weight-light">Visualizer</span>
     </a>
@@ -31,8 +31,8 @@
                     Dashboard
                   </p>
                 </a>
-              </li>
-              <li class="nav-item">
+              </li> -->
+              <!-- <li class="nav-item">
                 <a href="{{route('customers.index')}}" class="nav-link {{ Route::is('customers') ? 'active' : '' }}">
                 <a href="/customers" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
@@ -56,7 +56,7 @@
                     Sub Catgories
                   </p>
                 </a>
-              </li>              
+              </li>               -->
               <li class="nav-item">
                 <a href="/packages" class="nav-link">
                   <i class="nav-icon fas fa-cube"></i>
@@ -65,14 +65,14 @@
                   </p>
                 </a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="/template_mg" class="nav-link">
                   <i class="nav-icon fas fa-layer-group"></i>
                   <p>
                     Template Management
                   </p>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="/cms_mg" class="nav-link">
                   <i class="nav-icon fas fa-book"></i>
@@ -81,15 +81,7 @@
                   </p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="/show-profile" class="nav-link">
-                  <i class="nav-icon fas fa-user"></i>
-                  <p>
-                    My Profile
-                  </p>
-                </a>
               </li>
-              </li> -->
             </ul>
           </li>
 

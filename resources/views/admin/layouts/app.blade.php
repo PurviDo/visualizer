@@ -105,7 +105,9 @@
   <script src="{{ asset('adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
   <script src="{{ asset('adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
   <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
-
+  
+  <!-- custom css -->
+  <link rel="stylesheet" href="{{ asset('/assets/js/visualizer.js')}}">
   <script>
       $.ajaxSetup({
           headers: {

@@ -28,6 +28,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('show-profile', [AuthController::class, 'showProfile'])->name('show.profile');
+    Route::get('show-changePassword', [AuthController::class, 'showChangePassword'])->name('show.changePassword');
     Route::post('update-profile', [AuthController::class, 'updateProfile'])->name('update.profile');
     Route::post('change-password', [AuthController::class, 'changePassword'])->name('change.password');
     // Dashboard
@@ -40,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/template_mg', [DashboardController::class, 'index'])->name('dashboard');
 
     // CMS Management
-    Route::get('/cms_mg', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/cms_mg', [CMSController::class, 'index'])->name('dashboard');
 
     //CATEGORY
     Route::resource('category', CategoryController::class);
