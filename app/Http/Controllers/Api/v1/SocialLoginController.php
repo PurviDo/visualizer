@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\SocialLoginRequest;
 use App\Models\LinkedSocialAccount;
 use App\Models\User;
+use App\Models\Package;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Two\User as ProviderUser;
 
 class SocialLoginController extends Controller
@@ -75,12 +77,20 @@ class SocialLoginController extends Controller
                 $firstName = $nameParts['first_name'];
                 $lastName = $nameParts['last_name'];
 
+                $packages_details = Package::first();
+
                 $userId = DB::connection('mongodb')->collection('users')->insertGetId([
                     'first_name' => $firstName,
                     'last_name' => $lastName,
                     'email' => $providerUser->getEmail(),
-                    'is_active' => 1,
+                    'is_active' => "1",
                     'user_type' => 0,
+                    'mobile_no' => null,
+                    'otp' => null,
+                    'deleted_at' => null,
+                    'purchased_credit' => $packages_details->credits,
+                    'package_id' => $packages_details->_id,
+                    'password' => null,
                 ]);
                 
                 // Retrieve the user model after insertion
