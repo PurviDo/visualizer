@@ -73,7 +73,7 @@
                   </p>
                 </a>
               </li> -->
-              <li class="nav-item {{ (Route::is('aboutus') || Route::is('contactus') || Route::is('termsconditions') || Route::is('privacypolicy') || Route::is('faqsection') || Route::is('faqs')) ? 'menu-open' : '' }}">
+              <li class="nav-item {{ (Route::is('aboutus') || Route::is('contact-us.index') || Route::is('termsconditions') || Route::is('privacypolicy') || Route::is('faq-category.index') || Route::is('faq.index')) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-book"></i>
                   <p>
@@ -90,7 +90,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{route('contactus')}}" class="nav-link {{ Route::is('contactus') ? 'active' : '' }}">
+                    <a href="{{route('contact-us.index')}}" class="nav-link {{ Route::is('contact-us.index') ? 'active' : '' }}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Contact Us</p>
                     </a>
@@ -108,17 +108,18 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{route('faqsection')}}" class="nav-link {{ Route::is('faqsection') ? 'active' : '' }}">
+                    <a href="{{route('faq-category.index')}}" class="nav-link {{ Route::is('faq-category.index') ? 'active' : '' }}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>FAQs Sections</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{route('faqs')}}" class="nav-link {{ Route::is('faqs') ? 'active' : '' }}">
+                    <a href="{{route('faq.index')}}" class="nav-link {{ Route::is('faq.index') ? 'active' : '' }}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>FAQs Question & Answers</p>
                     </a>
                   </li>
+                  
                 </ul>
               </li>
               </li>

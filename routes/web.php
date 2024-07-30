@@ -5,11 +5,15 @@ use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\Cms\ContactUsController;
+use App\Http\Controllers\Admin\Cms\FaqCategoryController;
+use App\Http\Controllers\Admin\Cms\FaqController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\CMSController;
+use App\Models\Cms\ContactUs;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () {
@@ -43,7 +47,7 @@ Route::middleware('auth')->group(function () {
 
     // CMS Management
     Route::get('/about-us', [CMSController::class, 'aboutUs'])->name('aboutus');
-    Route::get('/contact-us', [CMSController::class, 'contactUs'])->name('contactus');
+    // Route::get('/contact-us', [CMSController::class, 'contactUs'])->name('contactus');
     Route::get('/terms-conditions', [CMSController::class, 'termsConditions'])->name('termsconditions');
     Route::get('/privacy-policy', [CMSController::class, 'privacyPolicy'])->name('privacypolicy');
     Route::get('/faq-section', [CMSController::class, 'faqSection'])->name('faqsection');
@@ -52,6 +56,11 @@ Route::middleware('auth')->group(function () {
     //CATEGORY
     Route::resource('category', CategoryController::class);
     Route::resource('sub-category', SubCategoryController::class);
+
+    //CMS
+    Route::resource('faq-category', FaqCategoryController::class);
+    Route::resource('faq', FaqController::class);
+    Route::resource('contact-us', ContactUsController::class);
 
     //PACKAGE 
     Route::resource('packages', PackageController::class);
