@@ -32,7 +32,7 @@
                   </p>
                 </a>
               </li> -->
-              <!-- <li class="nav-item">
+              <li class="nav-item">
                 <a href="{{route('customers.index')}}" class="nav-link {{ Route::is('customers') ? 'active' : '' }}">
                 <a href="/customers" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
@@ -40,7 +40,7 @@
                     Users
                   </p>
                 </a>
-              </li> -->
+              </li>
               <li class="nav-item">
                 <a href="{{route('category.index')}}" class="nav-link {{ Route::is('category.index') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-th"></i>
@@ -49,14 +49,14 @@
                   </p>
                 </a>
               </li>
-              <!-- <li class="nav-item">
+              <li class="nav-item">
                 <a href="{{route('sub-category.index')}}" class="nav-link {{ Route::is('sub-category.index') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                     Sub Catgories
                   </p>
                 </a>
-              </li>               -->
+              </li>              
               <li class="nav-item">
                 <a href="{{route('packages.index')}}" class="nav-link {{ Route::is('packages.index') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-cube"></i>
