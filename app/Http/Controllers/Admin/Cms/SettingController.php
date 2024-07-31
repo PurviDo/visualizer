@@ -11,41 +11,33 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SettingController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $module)
     {
-        if ($request->ajax()) {
-            $category = Setting::all();
-            return DataTables::of($category)
-                ->addIndexColumn()
-                ->editColumn('action', function ($row) {
-                    $btn = '<button class="btn btn-sm btn-warning btn-round tooltip-toggle edit-setting" data-id="' . $row->id . '" data-name="' . $row->name . '"  data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
-                    $btn .= ' <button class="btn btn-sm btn-danger btn-round tooltip-toggle delete-setting" data-original-title="Delete" data-action="' . route('setting.destroy', $row->id) . '"><i class="nav-icon fas fa-trash"></i></button>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+
+        $setting = Setting::where('data',$module)->first();
+        if($module == 'aboutUs') {
+            return view('admin.cms.aboutus',compact('setting'));
+        } elseif($module == 'privacyPolicy') {
+            return view('admin.cms.privacypolicy',compact('setting'));
+        } else {
+            return view('admin.cms.termsconditions',compact('setting'));
         }
-        return view('admin.cms.setting.index');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $module)
     {
         $id = $request->id;
 
         $rules = [
-            'name' => [
-                'required',
-                'max:255',
-                Rule::unique('categories')->ignore($id, '_id'),
-            ],
+            'content' => ['required']
         ];
 
         if ($id != 0) {
-            $message = "Setting has been updated successfully";
-            $category = Setting::findOrFail($id);
+            $message = "Data has been updated successfully";
+            $setting = Setting::findOrFail($id);
         } else {
-            $message = "Setting has been created successfully";
-            $category = new Setting();
+            $message = "Data has been created successfully";
+            $setting = new Setting();
         }
 
         $error = Validator::make($request->all(), $rules);
@@ -58,24 +50,10 @@ class SettingController extends Controller
             ]);
         }
 
-        $category->name = $request->name;
+        $setting->content = $request->content;
+        $setting->data = $module;
+        $setting->save();
 
-        $category->save();
-        return response()->json([
-            'success' => true,
-            'message' => $message,
-            'data' => [],
-        ]);
-    }
-
-    public function destroy(Setting $setting)
-    {        
-        $setting->delete();
-        $message = 'Setting has been deactivated successfully';
-        return response()->json([
-            'success' => true,
-            'message' => $message,
-            'data' => [],
-        ]);
+        return redirect('/'.$module)->with('message', $message);
     }
 }

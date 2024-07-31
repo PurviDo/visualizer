@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
             $table->longtext('content');
             $table->enum('data', ['aboutUs', 'privacyPolicy', 'termsConditions']);
             $table->timestamps();

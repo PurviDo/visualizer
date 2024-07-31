@@ -175,7 +175,7 @@
                     address = contactUs.address;
                     map_url = contactUs.map_url;
 
-                    $('.id').val(contactUs._id);
+                    $('.contact-us-id').val(contactUs._id);
                     $('.title').val(contactUs.title);
                     $('.phone').val(contactUs.phone);
                     $('.email').val(contactUs.email);
@@ -272,6 +272,7 @@
         $('.form-control').removeClass('is-invalid');
         $('.invalid-feedback').html('');
         $('#contact-us-form')[0].reset();
+        $('.contact-us-id').val(0);
         $(modalName).modal('show');
     }
 

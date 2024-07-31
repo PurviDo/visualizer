@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('faqs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->longtext('description')->nullable();
             $table->unsignedBigInteger('categoty_id');
             $table->foreign('categoty_id')->references('id')->on('faq_categories')->onDelete('cascade');
             $table->timestamps();

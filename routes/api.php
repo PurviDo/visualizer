@@ -17,6 +17,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\v1'], function ($api) {
     //cms
     $api->get('getFaq', 'CmsController@getFaq');
     $api->get('getContactUs', 'CmsController@getContactUs');
+    $api->get('getDetails/{module}', 'CmsController@getDetails');
 
     Route::group(['middleware' => ['auth:sanctum']], function ($auth) {
         $auth->post('change-password', 'AuthController@changePassword');

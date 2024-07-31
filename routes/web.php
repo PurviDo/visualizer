@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\Cms\ContactUsController;
 use App\Http\Controllers\Admin\Cms\FaqCategoryController;
 use App\Http\Controllers\Admin\Cms\FaqController;
+use App\Http\Controllers\Admin\Cms\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackageController;
@@ -61,6 +62,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('faq-category', FaqCategoryController::class);
     Route::resource('faq', FaqController::class);
     Route::resource('contact-us', ContactUsController::class);
+    Route::get('{module}', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('{module}/store', [SettingController::class, 'store'])->name('setting.store');
+
 
     //PACKAGE 
     Route::resource('packages', PackageController::class);

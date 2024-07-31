@@ -8,6 +8,6 @@ use MongoDB\Laravel\Eloquent\Model;
 class Setting extends Model
 {
     use HasFactory;
-    protected $fillable = ['content','title'];
+    protected $fillable = ['content','data'];
 
 }

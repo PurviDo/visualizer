@@ -21,11 +21,17 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div id="alert-container"></div>
-                        <form id="profileForm" action="#" method="POST">
+                        @if(session('message'))
+                            <div class="alert alert-success">
+                                {{ session('message') }}
+                            </div>
+                        @endif
+                        <form id="profileForm" action="{{ route('setting.store',['module' => 'termsConditions']) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ isset($setting->id) ? $setting->id : 0 }}">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <textarea name="termsconditions" class="form-control termsconditions" id="summernote_desc" placeholder="Enter Terms & Conditions Details"></textarea>
+                                    <textarea name="content" class="form-control termsconditions" id="summernote_desc" placeholder="Enter Terms & Conditions Details">{{ isset($setting->content) ? $setting->content : '' }}</textarea>
                                 </div>
                             </div>
                             <div class="card-footer">

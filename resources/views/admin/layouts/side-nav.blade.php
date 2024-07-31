@@ -73,7 +73,7 @@
                   </p>
                 </a>
               </li> -->
-              <li class="nav-item {{ (Route::is('aboutus') || Route::is('contact-us.index') || Route::is('termsconditions') || Route::is('privacypolicy') || Route::is('faq-category.index') || Route::is('faq.index')) ? 'menu-open' : '' }}">
+              <li class="nav-item {{ (Request::is('aboutUs') || Route::is('contact-us.index') || Request::is('privacyPolicy') || Request::is('termsConditions') || Route::is('faq-category.index') || Route::is('faq.index')) ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-book"></i>
                   <p>
@@ -84,7 +84,7 @@
 
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{route('aboutus')}}" class="nav-link {{ Route::is('aboutus') ? 'active' : '' }}">
+                    <a href="{{route('setting.index',['module' => 'aboutUs'])}}" class="nav-link {{ Request::is('aboutUs') ? 'active' : '' }}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>About Us</p>
                     </a>
@@ -96,13 +96,13 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{route('termsconditions')}}" class="nav-link {{ Route::is('termsconditions') ? 'active' : '' }}">
+                    <a href="{{route('setting.index',['module' => 'termsConditions'])}}" class="nav-link {{ Request::is('termsConditions')  ? 'active' : '' }}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Terms & Conditions</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{route('privacypolicy')}}" class="nav-link {{ Route::is('privacypolicy') ? 'active' : '' }}">
+                    <a href="{{route('setting.index',['module' => 'privacyPolicy'])}}" class="nav-link {{ Request::is('privacyPolicy') ? 'active' : '' }}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Privacy Policy</p>
                     </a>
@@ -119,7 +119,6 @@
                       <p>FAQs Question & Answers</p>
                     </a>
                   </li>
-                  
                 </ul>
               </li>
               </li>

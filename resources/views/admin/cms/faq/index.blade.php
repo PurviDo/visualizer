@@ -100,12 +100,7 @@
 <script>
     $(document).ready(function() {
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
+        // Initialize DataTable
         $('#data-table').DataTable({
             processing: true,
             serverSide: true,
@@ -140,56 +135,68 @@
                 }
             ]
         });
-    });
 
-    $(document).on('click', '.add-faq', function() {
-        modalShow('.faq-modal');
-        $('.modal-title').html("Add FAQ");
-    });
-
-    $(document).on('click', '.edit-faq', function() {
-        url = $(this).data('action')
-        $.ajax({
-            url: url,
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-
-                    modalShow('.faq-modal');
-                    $('.modal-title').html("Edit FAQ");
-
-                    var faq = response.data;
-                    id = faq._id;
-                    name = faq.name;
-                    category_id = faq.category_id;
-                    description = faq.description;
-
-                    $('.id').val(faq._id);
-                    $('.name').val(faq.name);
-                    $('.category_id').val(faq.category_id);
-                    $('.description').val(faq.description);
-                } else {
-                    console.error('Error fetching faq data');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX error:', error);
-            }
-        });
-    });
-    $(document).on('click', '.delete-faq,.restore-faq', function() {
-        var message;
-        url = $(this).data('action');
-        if ($(this).hasClass('delete-faq')) {
-            message = "Are you sure, you want to delete this FAQ ?";
-        } else if ($(this).hasClass('restore-category')) {
-            message = "Are you sure, you want to restore this FAQ ?";
+        // Initialize Summernote
+        function initializeSummernote() {
+            $(".description").summernote({
+                toolbar: [
+                    ["style", ["bold", "italic", "underline", "clear"]],
+                    ["fontsize", ["fontsize"]],
+                    ["color", ["color"]],
+                    ["para", ["ul", "ol", "paragraph"]],
+                    ["height", ["height"]],
+                ],
+                height: 200,
+            });
         }
-        Swal.fire({
+
+        initializeSummernote();
+
+        // Show add FAQ modal
+        $(document).on('click', '.add-faq', function() {
+            modalShow('.faq-modal');
+            $('.modal-title').html("Add FAQ");
+            $('.description').summernote('code', ''); // Clear Summernote content
+        });
+
+        // Show edit FAQ modal
+        $(document).on('click', '.edit-faq', function() {
+            var url = $(this).data('action');
+            $.ajax({
+                url: url,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        modalShow('.faq-modal');
+                        $('.modal-title').html("Edit FAQ");
+
+                        var faq = response.data;
+                        $('.id').val(faq._id);
+                        $('.name').val(faq.name);
+                        $('.category_id').val(faq.category_id);
+                        $('.description').summernote('code', faq.description); // Set Summernote content
+                    } else {
+                        console.error('Error fetching FAQ data');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', error);
+                }
+            });
+        });
+
+        // Handle delete and restore FAQ actions
+        $(document).on('click', '.delete-faq,.restore-faq', function() {
+            var message, url = $(this).data('action');
+            if ($(this).hasClass('delete-faq')) {
+                message = "Are you sure, you want to delete this FAQ ?";
+            } else if ($(this).hasClass('restore-faq')) {
+                message = "Are you sure, you want to restore this FAQ ?";
+            }
+            Swal.fire({
                 title: message,
                 icon: 'warning',
-                type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No',
@@ -198,8 +205,7 @@
                 reverseButtons: true,
                 focusConfirm: false,
                 focusCancel: false,
-            })
-            .then(function(result) {
+            }).then(function(result) {
                 if (result.value) {
                     $.ajax({
                         url: url,
@@ -210,62 +216,64 @@
                     });
                 }
             });
-    });
-
-    $(document).on('submit', '#faq-form', function(e) {
-        e.preventDefault();
-        var url, name, nameInvalid, categoryId, categoryIdInvalid, description,
-            modal, form;
-        url = $(this).attr('action');
-        name = $('.name');
-        nameInvalid = $('.name-invalid');
-        categoryId = $('.category_id');
-        categoryIdInvalid = $('.category_id-invalid');
-        description = $('.description');
-        modal = $('.faq-modal');
-        form = $('#faq-form');
-        $('.category-loading').addClass('show');
-        $.ajax({
-            url: url,
-            type: "POST",
-            dataType: 'json',
-            data: $(this).serialize(),
-
-            success: function(response) {
-                console.log(response);
-                $('.category-loading').removeClass('show');
-                if (response.success) {
-                    modalHide(modal);
-                    refresh_datatable();
-                    $(form)[0].reset();
-                } else {
-                    if (response.data.name) {
-                        name.addClass('is-invalid');
-                        nameInvalid.html(response.data.name[0]);
-                    }
-                    if (response.data.category_id) {
-                        categoryId.addClass('is-invalid');
-                        categoryIdInvalid.html(response.data.category_id[0]);
-                    }
-                }
-            },
         });
+
+        // Handle FAQ form submission
+        $(document).on('submit', '#faq-form', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('action'),
+                name = $('.name'),
+                nameInvalid = $('.name-invalid'),
+                categoryId = $('.category_id'),
+                categoryIdInvalid = $('.category_id-invalid'),
+                description = $('.description').val(), // Get Summernote content
+                modal = $('.faq-modal'),
+                form = $('#faq-form');
+
+            $('.category-loading').addClass('show');
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: 'json',
+                data: $(this).serialize() + "&description=" + encodeURIComponent(description),
+
+                success: function(response) {
+                    $('.category-loading').removeClass('show');
+                    if (response.success) {
+                        modalHide(modal);
+                        refresh_datatable();
+                        $(form)[0].reset();
+                        $('.description').summernote('code', ''); // Clear Summernote content
+                    } else {
+                        if (response.data.name) {
+                            name.addClass('is-invalid');
+                            nameInvalid.html(response.data.name[0]);
+                        }
+                        if (response.data.category_id) {
+                            categoryId.addClass('is-invalid');
+                            categoryIdInvalid.html(response.data.category_id[0]);
+                        }
+                    }
+                },
+            });
+        });
+
+        function modalShow(modalName) {
+            $('.form-control').removeClass('is-invalid');
+            $('.invalid-feedback').html('');
+            $('#faq-form')[0].reset();
+            $('.category_id').val(0);
+            $(modalName).modal('show');
+            initializeSummernote(); // Re-initialize Summernote when the modal is shown
+        }
+
+        function modalHide(modalName) {
+            $(modalName).modal('hide');
+        }
+
+        function refresh_datatable(response) {
+            $('#data-table').DataTable().ajax.reload(null, false);
+        }
     });
-
-    function modalShow(modalName) {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').html('');
-        $('#faq-form')[0].reset();
-        $('.category_id').val(0);
-        $(modalName).modal('show');
-    }
-
-    function modalHide(modalName) {
-        $(modalName).modal('hide');
-    }
-
-    function refresh_datatable(response) {
-        $('#data-table').DataTable().ajax.reload(null, false);
-    }
 </script>
 @endsection
