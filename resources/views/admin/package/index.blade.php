@@ -140,10 +140,10 @@
 
 
                                 <fieldset class="form-group text-right mb-0 col-12">
-                                    <button type="reset" class="btn" data-dismiss="modal">
+                                    <button type="reset" class="btn btn-cancel" data-dismiss="modal">
                                         Cancel
                                     </button>
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-info">
                                         Save
                                     </button>
                                 </fieldset>
@@ -378,7 +378,7 @@
                     showCancelButton: true,
                     confirmButtonText: 'Yes',
                     cancelButtonText: 'No',
-                    confirmButtonClass: "btn btn-primary",
+                    confirmButtonClass: "btn btn-info",
                     cancelButtonClass: "btn btn-danger",
                     reverseButtons: true,
                     focusConfirm: false,

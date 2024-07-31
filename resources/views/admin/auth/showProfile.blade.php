@@ -42,8 +42,8 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="{{route('dashboard')}}" class="btn">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a href="{{route('dashboard')}}" class="btn btn-cancel">Cancel</a>
+                                <button type="submit" class="btn btn-info">Submit</button>
                             </div>
                         </form>
                     </div>

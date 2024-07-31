@@ -40,7 +40,7 @@
                                     <button type="reset" class="btn btn-cancel" data-dismiss="modal">
                                         Cancel
                                     </button>
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-info">
                                         Change Password
                                     </button>
                                 </div>
