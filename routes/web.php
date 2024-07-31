@@ -58,6 +58,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('sub-category', SubCategoryController::class);
 
+    //PACKAGE 
+    Route::resource('packages', PackageController::class);
+
     //CMS
     Route::resource('faq-category', FaqCategoryController::class);
     Route::resource('faq', FaqController::class);
@@ -66,8 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::post('{module}/store', [SettingController::class, 'store'])->name('setting.store');
 
 
-    //PACKAGE 
-    Route::resource('packages', PackageController::class);
+    
 
     Route::get('/', function () {
         return redirect()->route('category.index');
