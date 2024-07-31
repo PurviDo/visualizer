@@ -1,8 +1,8 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar">
     <!-- Brand Logo -->
     <a href="{{route('dashboard')}}" class="brand-link">
-      <img src="{{ asset('/assets/images/logo/logo.png')}}" alt="CamClo3D" class="brand-image" style="opacity: .8">
-      <span class="brand-text font-weight-light">CamClo3D</span>
+      <img src="{{ asset('/assets/images/logo/logo.svg')}}" alt="CamClo3D" class="brand-image" style="opacity: .8">
+      <!-- <span class="brand-text font-weight-light">CamClo3D</span> -->
     </a>
 
     <!-- Sidebar -->

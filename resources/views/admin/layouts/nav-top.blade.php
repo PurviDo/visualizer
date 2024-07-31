@@ -39,12 +39,12 @@
       <a class="nav-link" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" href="#">
         <i class="far fa-user"></i>
       </a>
-      <div class="dropdown-menu">
+      <div class="dropdown-menu user-dropdown">
         <a class="dropdown-item" href="{{route('show.profile')}}">
           <i class="far fa-user"></i> My Profile
         </a>
         <div class="dropdown-divider"></div>
-        <a class="nav-link" href="{{route('show.changePassword')}}">
+        <a class="dropdown-item" href="{{route('show.changePassword')}}">
           <i class="fas fa-key"></i>  Change Password
         </a>
         <div class="dropdown-divider"></div>

@@ -1,5 +1,8 @@
 @extends('admin.auth.layouts.app')
 @section('content')
+    <div class="card-header text-center logoTitle">
+      <span class="h1">Forgot Password</span>
+    </div>
     <div class="card-body">
       <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
       <form action="{{ route('forget.password.post')}}" method="post">
@@ -23,13 +26,13 @@
         @enderror
         <div class="row">
           <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block">Request new password</button>
+            <button type="submit" class="btn btn-info btn-block">Request new password</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
       <p class="mt-3 mb-1 text-center">
-        <a href="{{ url('/') }}">Login</a>
+        <a class="primary-text" href="{{ url('/') }}">Login</a>
       </p>
     </div>
 @endsection

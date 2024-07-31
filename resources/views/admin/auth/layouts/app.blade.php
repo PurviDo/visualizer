@@ -13,18 +13,18 @@
   <link rel="stylesheet" href="{{ asset('/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('/adminlte/dist/css/adminlte.min.css') }}">
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="{{ asset('/assets/css/visualizer.css')}}">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
-<div class="login-logo">
-            <img src="{{ asset('/assets/images/logo/logo.png')}}" alt="CamClo3D" class="brand-image" style="opacity: .8" width="150">
-        </div>
+  <div class="login-logo">
+      <img src="{{ asset('/assets/images/logo/logo_withoutbg.png')}}" alt="CamClo3D" class="brand-image" style="opacity: .8" width="250">
+  </div>
   <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a href="" class="h1"><b>CamClo3D</b> Admin</a>
-    </div>
     @yield('content')
-    </div>
+  </div>
   <!-- /.card -->
 </div>
 <!-- jQuery -->
