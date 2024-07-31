@@ -31,7 +31,7 @@
                                     <tr>
                                         <th>Sr.no</th>
                                         <th>FAQ Name</th>
-                                        <th>Category Name</th>
+                                        <th>FAQ Section Name</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -58,9 +58,9 @@
                     <input type="hidden" name="id" value="0" class="id">
                     <div class="modal-body">
                         <fieldset class="form-group floating-label-form-group">
-                            <label for="category_id">Category Name <span class="text-danger">*</span></label>
+                            <label for="category_id">FAQ Section Name <span class="text-danger">*</span></label>
                             <select name="category_id" class="form-control category_id" required>
-                                <option selected value="">Select Category</option>
+                                <option selected value="">Select FAQ Section</option>
                                 @foreach ($categories as $category)
                                 <option value="{{ $category['_id'] }}">{{ $category['name'] }}</option>
                                 @endforeach
@@ -69,15 +69,15 @@
                         </fieldset>
 
                         <fieldset class="form-group floating-label-form-group">
-                            <label for="name">FAQ Name <span class="text-danger">*</span></label>
-                            <input type="text" name="name" class="form-control name" placeholder="Enter sub category name" required>
+                            <label for="name">FAQ Question <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control name" placeholder="Enter FAQ Question" required>
                             <div class="invalid-feedback font-weight-bold name-invalid" role="alert"></div>
                         </fieldset>
 
                         <fieldset class="form-group floating-label-form-group">
-                            <label for="description">Description <span class="text-danger">*</span></label>
+                            <label for="description">Answer <span class="text-danger">*</span></label>
                             <!-- <input type="text" name="description" class="form-control description" placeholder="Enter Description" required> -->
-                            <textarea name="description" class="form-control description" id="description" placeholder="Enter description"></textarea>
+                            <textarea name="description" class="form-control description" id="description" placeholder="Enter Answer"></textarea>
                             <div class="invalid-feedback font-weight-bold description-invalid" role="alert">
                             </div>
                         </fieldset>

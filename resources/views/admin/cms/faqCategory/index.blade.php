@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">FAQ Category</h1>
+                    <h1 class="m-0">FAQ Section</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                        <li class="breadcrumb-item active">FAQ Category</li>
+                        <li class="breadcrumb-item active">FAQ Section</li>
                     </ol>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-end align-items-center">
-                            <button type="button" class="btn btn-info add-faq-category">Add New FAQ Category</button>
+                            <button type="button" class="btn btn-info add-faq-category">Add New FAQ Section</button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -30,7 +30,7 @@
                                     <thead>
                                         <tr>
                                             <th>Sr.no</th>
-                                            <th>Category Name</th>
+                                            <th>Section Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -58,8 +58,8 @@
                         <input type="hidden" name="id" value="0" class="faq-category-id">
                         <div class="modal-body">
                             <fieldset class="form-group floating-label-form-group">
-                                <label for="email">FAQ Category Name <span class="text-danger">*</span></label>
-                                <input type="text" name="name" class="form-control name" placeholder="Enter FAQ category name"
+                                <label for="email">FAQ Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control name" placeholder="Enter FAQ Section name"
                                     required>
                                 <div class="invalid-feedback font-weight-bold name-invalid" role="alert"></div>
                             </fieldset>
@@ -122,7 +122,7 @@
 
     $(document).on('click', '.add-faq-category', function() {
         modalShow('.faq-category-modal');
-        $('.modal-title').html("Add Category");
+        $('.modal-title').html("Add FAQ Section");
     });
 
     $(document).on('click', '.edit-faq-category', function() {
@@ -130,7 +130,7 @@
         id = $(this).data('id');
         name = $(this).data('name');
         modalShow('.faq-category-modal');
-        $('.modal-title').html("Edit Category");
+        $('.modal-title').html("Edit FAQ Section");
         $('.faq-category-id').val(id);
         $('.name').val(name);
     });
@@ -139,9 +139,9 @@
         var message;
         url = $(this).data('action');
         if ($(this).hasClass('delete-faq-category')) {
-            message = "Are you sure, you want to delete this FAQ Category ?";
+            message = "Are you sure, you want to delete this FAQ Section ?";
         } else if ($(this).hasClass('restore-faq-category')) {
-            message = "Are you sure, you want to restore this FAQ Category ?";
+            message = "Are you sure, you want to restore this FAQ Section ?";
         }
         Swal.fire({
                 title: message,
