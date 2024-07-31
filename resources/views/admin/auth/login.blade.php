@@ -3,6 +3,9 @@
 
 <!-- /.login-logo -->
 <div class="card">
+  <div class="card-header text-center logoTitle">
+    <span class="h1">Login</span>
+  </div>
   <div class="card-body login-card-body">
     <p class="login-box-msg">Sign in to start your session</p>
 
@@ -38,14 +41,14 @@
       @enderror
       <div class="row">
         <div class="col-12">
-          <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          <button type="submit" class="btn btn-info btn-block">Sign In</button>
         </div>
         <!-- /.col -->
       </div>
     </form>
 
     <p class="mt-3 mb-1 text-center">
-      <a href="{{ route('forget.password.get') }}">Forgot Password??</a>
+      <a class="primary-text" href="{{ route('forget.password.get') }}">Forgot Password??</a>
     </p>
   </div>
   <!-- /.login-card-body -->

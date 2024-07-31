@@ -37,10 +37,10 @@
                                     <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Enter Confirm New Password" required>
                                 </div>
                                 <div class="form-group">
-                                    <button type="reset" class="btn" data-dismiss="modal">
+                                    <button type="reset" class="btn btn-cancel" data-dismiss="modal">
                                         Cancel
                                     </button>
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-info">
                                         Change Password
                                     </button>
                                 </div>

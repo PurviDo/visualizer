@@ -16,9 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // if (env(key: 'APP_ENV') =='local') {
-        //     URL::forceScheme(scheme:'https');
-        // }
+        if (env(key: 'APP_ENV') =='local') {
+            URL::forceScheme(scheme:'https');
+        }
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 

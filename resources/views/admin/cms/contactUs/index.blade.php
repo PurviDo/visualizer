@@ -82,10 +82,10 @@
                             <input type="text" name="map_url" class="form-control map_url" placeholder="Enter map url">
                         </fieldset>
                         <fieldset class="form-group text-right mb-0">
-                            <button type="reset" class="btn" data-dismiss="modal">
+                            <button type="reset" class="btn btn-cancel" data-dismiss="modal">
                                 Cancel
                             </button>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-info">
                                 Save
                             </button>
                         </fieldset>
@@ -152,7 +152,7 @@
 
     $(document).on('click', '.add-contact-us', function() {
         modalShow('.contact-us-modal');
-        $('.modal-title').html("Add Category");
+        $('.modal-title').html("Add Contact Details");
     });
 
     $(document).on('click', '.edit-contact-us', function() {
@@ -205,7 +205,7 @@
                 showCancelButton: true,
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No',
-                confirmButtonClass: "btn btn-primary",
+                confirmButtonClass: "btn btn-info",
                 cancelButtonClass: "btn btn-danger",
                 reverseButtons: true,
                 focusConfirm: false,

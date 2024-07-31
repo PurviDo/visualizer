@@ -36,13 +36,13 @@
         @enderror
         <div class="row">
           <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block">Change password</button>
+            <button type="submit" class="btn btn-info btn-block">Change password</button>
           </div>
         </div>
       </form>
 
-      <p class="mt-3 mb-1">
-        <a href="/">Login</a>
+      <p class="mt-3 mb-1 text-center">
+        <a class="primary-text" href="{{ url('/') }}">Login</a>
       </p>
     </div>
   </div>
