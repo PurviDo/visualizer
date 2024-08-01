@@ -13,7 +13,7 @@ class PackageController extends Controller
     use ApiResponseTrait;
 
     public function getPackages() {
-        $packages = Package::where('is_deleted', false)->get();
+        $packages = Package::get();
         if ($packages) {
             return $this->sendResponse('Package data get successfully.', 1, array($packages), $this->successStatus);
         }

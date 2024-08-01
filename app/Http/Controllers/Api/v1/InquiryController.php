@@ -18,7 +18,7 @@ class InquiryController extends Controller
         $validator = Validator::make($data, [
             'name' => 'required',
             'email' => 'required|email',
-            'phone_number' => 'required',
+            //'phone_number' => 'required',
             'message' => 'required',
         ]);
         if ($validator->fails()) {
