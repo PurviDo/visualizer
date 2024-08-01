@@ -65,6 +65,14 @@
                   </p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{route('inquiry.index')}}" class="nav-link {{ Route::is('inquiry.index') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-cube"></i>
+                  <p>
+                    Inquiry
+                  </p>
+                </a>
+              </li>
               <!-- <li class="nav-item">
                 <a href="/template_mg" class="nav-link">
                   <i class="nav-icon fas fa-layer-group"></i>

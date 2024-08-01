@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\CMSController;
+use App\Http\Controllers\Admin\InquiryController;
 use App\Models\Cms\ContactUs;
 
 Route::middleware('guest')->group(function () {
@@ -61,15 +62,15 @@ Route::middleware('auth')->group(function () {
     //PACKAGE 
     Route::resource('packages', PackageController::class);
 
+    //Inquiry 
+    Route::resource('inquiry', InquiryController::class);
+
     //CMS
     Route::resource('faq-category', FaqCategoryController::class);
     Route::resource('faq', FaqController::class);
     Route::resource('contact-us', ContactUsController::class);
     Route::get('{module}', [SettingController::class, 'index'])->name('setting.index');
     Route::post('{module}/store', [SettingController::class, 'store'])->name('setting.store');
-
-
-    
 
     Route::get('/', function () {
         return redirect()->route('category.index');

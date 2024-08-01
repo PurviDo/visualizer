@@ -13,11 +13,16 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\v1'], function ($api) {
     $api->post('verify-otp', 'AuthController@verifyOtp');
     $api->post('reset-password', 'AuthController@resetPassword');
     $api->post('social-login', 'SocialLoginController@login');
-
+    
     //cms
     $api->get('getFaq', 'CmsController@getFaq');
     $api->get('getContactUs', 'CmsController@getContactUs');
     $api->get('getDetails/{module}', 'CmsController@getDetails');
+    
+    $api->post('inquiry', 'InquiryController@addInquiry');
+    $api->get('getCategories', 'CategoryController@getCategories');
+    $api->get('getSubCategories', 'CategoryController@getSubCategories');
+    $api->get('getPackages', 'PackageController@getPackages');
 
     Route::group(['middleware' => ['auth:sanctum']], function ($auth) {
         $auth->post('change-password', 'AuthController@changePassword');
