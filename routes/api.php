@@ -23,11 +23,14 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\v1'], function ($api) {
     $api->get('getCategories', 'CategoryController@getCategories');
     $api->get('getSubCategories', 'CategoryController@getSubCategories');
     $api->get('getPackages', 'PackageController@getPackages');
-
+    
     Route::group(['middleware' => ['auth:sanctum']], function ($auth) {
         $auth->post('change-password', 'AuthController@changePassword');
-        $auth->post('myprofile', 'AuthController@userProfile');
+        $auth->post('   ', 'AuthController@userProfile');
         $auth->post('profile-update', 'AuthController@profileUpdate');
         $auth->post('logout', 'AuthController@logOut');
+        
+        $auth->post('purchasePackage', 'PackageController@purchasePackage');
+        $auth->get('getUserPackage', 'PackageController@getUserPackage');
     });
 });
