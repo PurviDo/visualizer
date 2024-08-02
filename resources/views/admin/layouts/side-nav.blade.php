@@ -124,7 +124,7 @@
                   <li class="nav-item">
                     <a href="{{route('faq.index')}}" class="nav-link {{ Route::is('faq.index') ? 'active' : '' }}">
                       <i class="far fa-circle nav-icon"></i>
-                      <p>FAQs Question & Answers</p>
+                      <p>FAQs Q&A</p>
                     </a>
                   </li>
                 </ul>

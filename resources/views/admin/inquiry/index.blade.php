@@ -59,7 +59,7 @@
                 <p><strong>Name:</strong> <span id="modal-name"></span></p>
                 <p><strong>Email:</strong> <span id="modal-email"></span></p>
                 <!-- <p><strong>Phone:</strong> <span id="modal-phone"></span></p> -->
-                <p><strong>Message:</strong> <span id="modal-message"></span></p>
+                <!-- <p><strong>Message:</strong> <span id="modal-message"></span></p> -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -108,10 +108,10 @@
                 //     data: 'phone_number',
                 //     name: 'phone_number'
                 // },
-                {
-                    data: 'message',
-                    name: 'message'
-                },
+                // {
+                //     data: 'message',
+                //     name: 'message'
+                // },
                 {
                     data: 'action',
                     name: 'action',
