@@ -22,11 +22,11 @@ return new class extends Migration
             $table->unsignedBigInteger('sub_category_id');
             $table->foreign('sub_category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->integer('no_of_files');
-            $table->string('background_image', 1000)->nullable();
-            $table->string('foreground_image', 1000)->nullable();
-            $table->string('shadow_image', 1000)->nullable();
-            $table->string('highlight_image', 1000)->nullable();
-            $table->string('preview_image', 1000)->nullable();
+            $table->text('background_image')->nullable();
+            $table->text('foreground_image')->nullable();
+            $table->text('shadow_image')->nullable();
+            $table->text('highlight_image')->nullable();
+            $table->text('preview_image')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->boolean('status')->default(1)->comment('1 = active,0 = not active');            

@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\CMSController;
 use App\Http\Controllers\Admin\InquiryController;
+use App\Http\Controllers\Admin\TemplateController;
 use App\Models\Cms\ContactUs;
 
 Route::middleware('guest')->group(function () {
@@ -64,6 +65,9 @@ Route::middleware('auth')->group(function () {
 
     //Inquiry 
     Route::resource('inquiry', InquiryController::class);
+
+    //Inquiry 
+    Route::resource('template', TemplateController::class);
 
     //CMS
     Route::resource('faq-category', FaqCategoryController::class);
