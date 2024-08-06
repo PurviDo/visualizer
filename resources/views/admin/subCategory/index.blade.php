@@ -147,7 +147,6 @@
             $('#data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                pageLength: 1,
                 language: {
                     searchPlaceholder: 'Search...',
                     scrollX: "100%",
