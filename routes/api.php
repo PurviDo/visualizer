@@ -26,7 +26,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\v1'], function ($api) {
     
     Route::group(['middleware' => ['auth:sanctum']], function ($auth) {
         $auth->post('change-password', 'AuthController@changePassword');
-        $auth->post('   ', 'AuthController@userProfile');
+        $auth->post('myprofile', 'AuthController@userProfile');
         $auth->post('profile-update', 'AuthController@profileUpdate');
         $auth->post('logout', 'AuthController@logOut');
         
