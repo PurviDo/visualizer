@@ -46,8 +46,8 @@ class UserController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        $package = Package::query()->where('status', 'Active')->get();
-        return view('admin.customers.index', compact('package'));
+        $packages = Package::query()->where('status', 'Active')->get();
+        return view('admin.customers.index', compact('packages'));
     }
 
     public function store(RegisterApiRequest $request)
@@ -55,7 +55,7 @@ class UserController extends Controller
         $users = $this->userRepository->createWebUser($request->validated());
         $message = "User Created successfully.";
 
-        $package = Package::first();
+        $package = Package::findOrfail($request->package_id);
         $startDate = Carbon::now();
         $endDate = $startDate->copy()->addMonths($package->duration);
         $data['package_id'] = $package->id;

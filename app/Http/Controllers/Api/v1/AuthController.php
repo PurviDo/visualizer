@@ -22,6 +22,8 @@ use Illuminate\Http\Request;
 use App\Helpers\Helper;
 use App\Http\Requests\ChangePasswordApiRequest;
 use App\Http\Requests\ProfileUpdateApiRequest;
+use App\Models\Package;
+use App\Models\UserPackages;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +52,16 @@ class AuthController extends Controller
     public function signUp(RegisterApiRequest $request)
     {
         $data = $this->userRepository->createUser($request->validated());
+
+        $package = Package::first();
+        $startDate = Carbon::now();
+        $endDate = $startDate->copy()->addMonths($package->duration);
+        $data['package_id'] = $package->id;
+        $data['user_id'] = $data->id;
+        $data['start_date'] = Carbon::now()->format('Y-m-d');
+        $data['end_date'] = $endDate->format('Y-m-d');
+        UserPackages::create($data);
+
         if ($data) {
             return $this->sendResponse('User Created successfully.', 1, array($data), $this->successStatus);
         }

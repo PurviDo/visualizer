@@ -93,26 +93,25 @@
 
                             <fieldset class="form-group floating-label-form-group not-editable">
                                 <label for="package_id">Package<span class="text-danger">*</span></label>
-                                <input type="package_id" name="package_id" class="form-control email" placeholder="Enter Email "
-                                    required>
-                                <div class="invalid-feedback font-weight-bold package_id-invalid" role="alert">
-                                </div>
+                                <select name="package_id" class="form-control package_id">
+                                    <option selected value="">Select Package</option>
+                                    @foreach ($packages as $package)
+                                        <option value="{{ $package['_id'] }}">{{ $package['name'] }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback font-weight-bold package_id-invalid" role="alert"></div>
                             </fieldset>
 
                             <fieldset class="form-group floating-label-form-group not-editable">
                                 <label for="password">Password<span class="text-danger">*</span></label>
-                                <input type="password" name="password" class="form-control password" placeholder="Enter Password "
-                                    required>
-                                <div class="invalid-feedback font-weight-bold password-invalid" role="alert">
-                                </div>
+                                <input type="password" name="password" class="form-control password" placeholder="Enter Password ">
+                                <div class="invalid-feedback font-weight-bold password-invalid" role="alert"></div>
                             </fieldset>
 
                             <fieldset class="form-group floating-label-form-group not-editable">
                                 <label for="confirm_password">Confirm Password<span class="text-danger">*</span></label>
-                                <input type="password" name="confirm_password" class="form-control confirm-password" placeholder="Enter Confirm Password "
-                                    required>
-                                <div class="invalid-feedback font-weight-bold confirm-password-invalid" role="alert">
-                                </div>
+                                <input type="password" name="confirm_password" class="form-control confirm-password" placeholder="Enter Confirm Password ">
+                                <div class="invalid-feedback font-weight-bold confirm-password-invalid" role="alert"></div>
                             </fieldset>
 
                             <fieldset class="form-group text-right mb-0">
@@ -240,12 +239,16 @@
 
     $(document).on('click', '.add-item-button', function() {
         $('#cid').val(0);                    
-        // Set form action to update route
         $('#primary-submit-form').attr('action', '{{ url('customers') }}/');
         $('#primary-submit-form').attr('method', 'POST');
-
+        
         modalShow('.primary-submit-modal');
         $('.modal-title').html("Add User");
+        
+        // Show all fields for adding
+        $(".not-editable").show();
+        $(".form-control").removeClass('is-invalid');
+        $('.invalid-feedback').html('');
     });
 
     $(document).on('click', '.show-customer', function() {
@@ -278,29 +281,31 @@
     });
 
     $(document).on('click', '.edit-customer', function() {
-        url = $(this).data('action')
+    var url = $(this).data('action');
+    
         $.ajax({
             url: url,
             method: 'GET',
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
+                    var customer = response.data;
 
                     modalShow('.primary-submit-modal');
                     $('.modal-title').html("Edit User");
-                    var customer = response.data;
 
+                    // Populate form fields
                     $('.first-name').val(customer.first_name);
                     $('.last-name').val(customer.last_name);
                     $('.email').val(customer.email);
                     $('.mobile-no').val(customer.mobile_no);
                     $('#cid').val(customer._id);
 
+                    // Hide fields not required for editing
                     $(".not-editable").hide();
                     
                     // Set form action to update route
                     $('#primary-submit-form').attr('action', '{{ url('customers') }}/' + customer._id);
-                    // $('#primary-submit-form').attr('action', "{{ route('customers.update', "+customer._id+") }}");
                     $('#primary-submit-form').attr('method', 'PUT');
 
                 } else {
@@ -350,12 +355,12 @@
 
     $(document).on('submit', '#primary-submit-form', function(e) {
         e.preventDefault();
-        var url, name, nameInvalid, modal, form;
-        url = $(this).attr('action');  
-        method = $(this).attr('method');      
-        modal = $('.primary-submit-modal');
-        form = $('#primary-submit-form');
+        var url = $(this).attr('action');  
+        var method = $(this).attr('method');      
+        var modal = $('.primary-submit-modal');
+        var form = $('#primary-submit-form');
         $('.category-loading').addClass('show');
+        
         $.ajax({
             url: url,
             type: method,
@@ -363,7 +368,6 @@
             data: $(this).serialize(),
 
             success: function(response) {
-                console.log(response.error);
                 $('.category-loading').removeClass('show');
                 if (response.success) {
                     modalHide(modal);
@@ -371,33 +375,52 @@
                     $(form)[0].reset();
                     // toastr.success(response.message);
                 } else {
-                    
-                    if (response.data.name) {
-                        $('.first-name').addClass('is-invalid');
-                        nameInvalid.html(response.data.name[0]);
-                    }
+                    // Handle validation errors
+                    handleValidationErrors(response.data);
                 }
             },
-            error: function (xhr, ajaxOptions, thrownError) {
-                if (xhr.responseJSON.error.first_name) {
-                    $('.first-name').addClass('is-invalid');
-                    $('.first-name-invalid').html(xhr.responseJSON.error.phone_number[0]);
-                }
-                else if (xhr.responseJSON.error.last_name) {
-                    $('.last-name').addClass('is-invalid');
-                    $('.last-name-invalid').html(xhr.responseJSON.error.phone_number[0]);
-                }
-                else if (xhr.responseJSON.error.phone_number) {
-                    $('.mobile-no').addClass('is-invalid');
-                    $('.mobile-no-invalid').html(xhr.responseJSON.error.phone_number[0]);
-                }
-                else if (xhr.responseJSON.error.email) {
-                    $('.email').addClass('is-invalid');
-                    $('.email-invalid').html(xhr.responseJSON.error.phone_number[0]);
+            error: function(xhr, ajaxOptions, thrownError) {
+                $('.category-loading').removeClass('show');
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    handleValidationErrors(xhr.responseJSON.error);
                 }
             }
         });
     });
+
+    function handleValidationErrors(errors) {
+        $('.form-control').removeClass('is-invalid');
+        $('.invalid-feedback').html('');
+        
+        if (errors.first_name) {
+            $('.first-name').addClass('is-invalid');
+            $('.first-name-invalid').html(errors.first_name[0]);
+        }
+        if (errors.last_name) {
+            $('.last-name').addClass('is-invalid');
+            $('.last-name-invalid').html(errors.last_name[0]);
+        }
+        if (errors.phone_number) {
+            $('.mobile-no').addClass('is-invalid');
+            $('.mobile-no-invalid').html(errors.phone_number[0]);
+        }
+        if (errors.email) {
+            $('.email').addClass('is-invalid');
+            $('.email-invalid').html(errors.email[0]);
+        }
+        if (errors.package_id && $(".package_id").is(":visible")) {
+            $('.package_id').addClass('is-invalid');
+            $('.package_id-invalid').html(errors.package_id[0]);
+        }
+        if (errors.password && $(".password").is(":visible")) {
+            $('.password').addClass('is-invalid');
+            $('.password-invalid').html(errors.password[0]);
+        }
+        if (errors.confirm_password && $(".confirm-password").is(":visible")) {
+            $('.confirm-password').addClass('is-invalid');
+            $('.confirm-password-invalid').html(errors.confirm_password[0]);
+        }
+    }
 
     function modalShow(modalName) {
         $('.form-control').removeClass('is-invalid');

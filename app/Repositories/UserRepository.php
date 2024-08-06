@@ -14,7 +14,7 @@ class UserRepository implements UserRepositoryInterface
     public function createUser($request)
     {
         $request['password'] = Hash::make($request['password']);
-        $packages_details = Package::first();
+        $packages_details = Package::fildOrfail($request->package_id);
         $request['purchased_credit'] = $packages_details->credits;
         // $otp = rand(111111, 999999);
         $otp = 111111;
