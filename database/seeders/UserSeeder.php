@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Package;
 use App\Models\User;
+use App\Models\UserPackages;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +39,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
             'mobile_no' => '1234567890',
-            'password' => bcrypt('123456'),
+            'password' => bcrypt('12345678'),
             'purchased_credit' => 10,
             'package_id' => "1",
             'user_type' => 0,
@@ -44,5 +47,17 @@ class UserSeeder extends Seeder
             'otp' => null,
             'deleted_at' => null,
         ]);
+
+        $user = User::where('email','john.doe@example.com')->first();
+        $package = Package::first();
+        $startDate = Carbon::now();
+        $endDate = $startDate->copy()->addMonths($package->duration);
+        UserPackages::create([
+            'package_id' => $package->_id,
+            'user_id' => $user->_id,
+            'start_date' => $startDate,
+            'end_date' => $endDate
+        ]);
+
     }
 }

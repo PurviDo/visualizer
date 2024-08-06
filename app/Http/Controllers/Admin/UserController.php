@@ -11,6 +11,8 @@ use App\Services\UserServices;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\RegisterApiRequest;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\UserPackages;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -52,6 +54,15 @@ class UserController extends Controller
     {
         $users = $this->userRepository->createWebUser($request->validated());
         $message = "User Created successfully.";
+
+        $package = Package::first();
+        $startDate = Carbon::now();
+        $endDate = $startDate->copy()->addMonths($package->duration);
+        $data['package_id'] = $package->id;
+        $data['user_id'] = $users->id;
+        $data['start_date'] = Carbon::now()->format('Y-m-d');
+        $data['end_date'] = $endDate->format('Y-m-d');
+        UserPackages::create($data);
 
         return response()->json([
             'success' => true,
