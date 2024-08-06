@@ -11,7 +11,23 @@ class UserPackages extends Model
     protected $fillable = [
         'user_id',
         'package_id',
-        'purchase_date',
+        'start_date',
+        'end_date',
         'credit',
+        'actual_price',
+        'discounted_price',
+        'total_paid_amount',
     ];
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
 }
