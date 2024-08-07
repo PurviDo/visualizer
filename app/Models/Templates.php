@@ -17,11 +17,6 @@ class Templates extends Model
         'category_id',
         'sub_category_id',
         'no_of_files',
-        'background_image',
-        'foreground_image',
-        'shadow_image',
-        'highlight_image',
-        'preview_image',
         'status',
         'user_id'
     ];

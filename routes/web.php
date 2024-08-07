@@ -68,6 +68,8 @@ Route::middleware('auth')->group(function () {
 
     //Inquiry 
     Route::resource('template', TemplateController::class);
+    Route::get('subcategories/{categoryId}', [TemplateController::class, 'getSubCategories'])->name('getSubCategories');
+    Route::get('noOfFiles/{categoryId}', [TemplateController::class, 'getNoOfFiles'])->name('getNoOfFiles');
 
     //CMS
     Route::resource('faq-category', FaqCategoryController::class);
