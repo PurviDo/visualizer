@@ -13,14 +13,14 @@ class CategoryController extends Controller
     use ApiResponseTrait;
 
     public function getCategories() {
-        $categories = Category::where('is_deleted', false)->get();
+        $categories = Category::where('is_deleted', 0)->get();
         if ($categories) {
             return $this->sendResponse('Category data get successfully.', 1, array($categories), $this->successStatus);
         }
     }
 
     public function getSubCategories() {
-        $subCategories = Category::where('is_deleted', false)->where('parent_id', null)->get();;
+        $subCategories = Category::where('is_deleted', 0)->where('parent_id', null)->get();;
         if ($subCategories) {
             return $this->sendResponse('Sub Category data get successfully.', 1, array($subCategories), $this->successStatus);
         }

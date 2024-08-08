@@ -31,7 +31,8 @@ class CategorySeeder extends Seeder
             ],
             [
                 'name' => 'Furniture',
-                'is_deleted' => 0
+                'is_deleted' => 0,
+                'subcategories' => []
             ]
         ];
 

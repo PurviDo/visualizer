@@ -17,7 +17,7 @@ class CategoryController extends Controller
         if ($request->ajax()) {
             $category = Category::query()
                 ->with('subCategories')
-                ->where('is_deleted', false)
+                ->where('is_deleted', 0)
                 ->where('parent_id', null)
                 ->get();
             return DataTables::of($category)

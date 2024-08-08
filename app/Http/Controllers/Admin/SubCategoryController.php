@@ -16,7 +16,7 @@ class SubCategoryController extends Controller
         if ($request->ajax()) {
             $subCategory = Category::query()
                 ->with('Category')
-                ->where('is_deleted', false)
+                ->where('is_deleted', 0)
                 ->where('parent_id', '!=', null)
                 ->get();
             return DataTables::of($subCategory)
@@ -29,7 +29,7 @@ class SubCategoryController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        $categories = Category::where('is_deleted', false)->where('parent_id', null)->get();
+        $categories = Category::where('is_deleted', 0)->where('parent_id', null)->get();
         return view('admin.subCategory.index', compact('categories'));
     }
 
