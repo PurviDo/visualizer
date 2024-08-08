@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use App\Helpers\Helper;
 use App\Http\Requests\ChangePasswordApiRequest;
 use App\Http\Requests\ProfileUpdateApiRequest;
+use App\Http\Requests\UpdatePhoneNoApiRequest;
 use App\Models\Package;
 use App\Models\UserPackages;
 use Illuminate\Support\Str;
@@ -225,4 +226,16 @@ class AuthController extends Controller
         $data = $this->userRepository->getUserData($request);
         return $this->sendResponse('My Profile details', 1, $data, $this->successStatus);
     }
+
+    public function updatePhoneNo(UpdatePhoneNoApiRequest $request) {
+        $result = $this->userRepository->findUserById($request->user_id);
+        if ($result) {
+            $otp = 111111;
+            $this->userRepository->updateUser($result->id, ['otp' => $otp, 'mobile_no' => $request->phone_number, 'updated_at' => now()]);
+
+            return $this->sendResponse('Phone Number Updated successfully.', 1, null, $this->successStatus);
+        }
+        return $this->sendResponse('User not exist.', 0, null, $this->notFoundStatus);
+    }
+
 }

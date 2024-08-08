@@ -13,6 +13,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\v1'], function ($api) {
     $api->post('verify-otp', 'AuthController@verifyOtp');
     $api->post('reset-password', 'AuthController@resetPassword');
     $api->post('social-login', 'SocialLoginController@login');
+    $api->post('update-phoneno', 'AuthController@updatePhoneNo');
     
     //cms
     $api->get('getFaq', 'CmsController@getFaq');
