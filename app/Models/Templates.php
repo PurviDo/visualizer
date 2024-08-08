@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Http\Controllers\Admin\SubCategoryController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+
 class Templates extends Model
 {
     use HasFactory;
@@ -31,6 +34,11 @@ class Templates extends Model
     }
     public function subCategory()
     {
-        return $this->belongsTo(SubCategoryController::class);
+        return $this->belongsTo(category::class,'sub_category_id');
+    }
+
+    public function templateModels(): HasMany
+    {
+        return $this->hasMany(TemplateModels::class,'template_id','id');
     }
 }

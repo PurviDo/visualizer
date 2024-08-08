@@ -32,6 +32,8 @@
                                         <th>Sr.no</th>
                                         <th>Template Name</th>
                                         <th>Category Name</th>
+                                        <th>SubCategory Name</th>
+                                        <th>No of file</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -54,35 +56,6 @@
 <script src="{{asset('assets/js/addModel.js')}}"></script>
 <script>
     $(document).ready(function() {
-        $('.category_id').on('change', function() {
-            var categoryId = $(this).val();
-
-            if (categoryId) {
-                $.ajax({
-                    url: "{{ url('/subcategories') }}/" + categoryId,
-                    type: 'GET',
-                    success: function(data) {
-                        $('#subCategory_id').empty().append('<option value="">Select Sub Category</option>');
-                        $.each(data, function(key, value) {
-                            $('#subCategory_id').append('<option value="' + key + '">' + value + '</option>');
-                        });
-                    }
-                });
-            } else {
-                $('#subCategory_id').empty().append('<option value="">Select Sub Category</option>');
-            }
-        });
-
-        $('.custom_user_id').hide();
-        $('.template_type').on('change', function() {
-            var subCategoryId = $(this).val();
-            
-            if (subCategoryId == "custom") {
-                $('.custom_user_id').show();
-            } else {
-                $('.custom_user_id').hide();
-            }
-        });
 
         $.ajaxSetup({
             headers: {
@@ -115,6 +88,14 @@
                 {
                     data: 'category.name',
                     name: 'category.name'
+                },
+                {
+                    data: 'sub_category.name',
+                    name: 'sub_category.name'
+                },
+                {
+                    data: 'no_of_files',
+                    name: 'no_of_files'
                 },
                 {
                     data: 'action',

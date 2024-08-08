@@ -31,11 +31,11 @@ $(function () {
   });
 
   $(document).on('click', '.dynamic-pd', function () {
-    if ($('.dynamicPersonDetails tr').length < 5) {
+    if ($('.dynamicPersonDetails tr').length < 10) {
       addMember(countModel, parseInt($('#no_of_files').val(), 10));
       countModel++; 
     } else {
-      alert("You can only add up to 5 members.");
+      alert("You can only add up to 5 models.");
     }
   });
 
@@ -50,7 +50,7 @@ $(function () {
     html += `<td>
                 <fieldset class="form-group floating-label-form-group">
                     <label for="background_image_${countModel}">Background Image</label>
-                    <input type="file" name="background_image[]" class="form-control background_image">
+                    <input type="file" name="background_image_${countModel}" class="form-control background_image">
                     <div class="invalid-feedback font-weight-bold background_image_${countModel}-invalid" role="alert"></div>
                 </fieldset>
               </td>
@@ -106,7 +106,7 @@ $(function () {
               </td>
             </tr>`;
 
-    $(".dynamicPersonDetails").prepend(html);
+    $(".dynamicPersonDetails").append(html);
     updateAddButton();
   }
 
