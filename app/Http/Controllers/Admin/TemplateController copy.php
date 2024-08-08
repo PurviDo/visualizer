@@ -21,7 +21,7 @@ class TemplateController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $subCategory = Templates::with(['category', 'subCategory'])->get();
+            $subCategory = Templates::with(['category','subCategory'])->get();
             return DataTables::of($subCategory)
                 ->addIndexColumn()
                 ->editColumn('action', function ($row) {
@@ -52,7 +52,7 @@ class TemplateController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         // Validate the request
         $validator = Validator::make($request->all(), [
             'template_type' => 'required|in:public,custom',
@@ -74,61 +74,77 @@ class TemplateController extends Controller
             $data['status'] = 1;
             $template = Templates::create($data);
 
-            $templateId = $template->id;
+            // Extract file fields from request
+            $fileFields = array_filter($request->all(), function ($key) {
+                return strpos($key, 'background_image_') === 0
+                    || strpos($key, 'foreground_image') === 0
+                    || strpos($key, 'shadow_image_') === 0
+                    || strpos($key, 'highlight_image_') === 0
+                    || strpos($key, 'preview_image_') === 0
+                    || strpos($key, 'file_') === 0;
+            }, ARRAY_FILTER_USE_KEY);
 
-            // Handle dynamic rows for template models
-            $modelIndex = 0;
-            while ($request->has("background_image_$modelIndex")) {
-
-                $templateModel = TemplateModels::create(['template_id' => $templateId]);
-                $modelData = [
-                    'background_image' => $this->storeFile($request->file("background_image_$modelIndex"), $templateId, $templateModel->id,'background_image'),
-                    'foreground_image' => $this->storeFile($request->file("foreground_image_$modelIndex"), $templateId, $templateModel->id,'foreground_image'),
-                    'shadow_image' => $this->storeFile($request->file("shadow_image_$modelIndex"), $templateId, $templateModel->id,'shadow_image'),
-                    'highlight_image' => $this->storeFile($request->file("highlight_image_$modelIndex"), $templateId, $templateModel->id,'highlight_image'),
-                    'preview_image' => $this->storeFile($request->file("preview_image_$modelIndex"), $templateId, $templateModel->id,'preview_image'),
-                    'model_image' => $this->storeFiles($request->file("file_$modelIndex"), $templateId, $templateModel->id,'model_image'),
-                ];
-                $templateModel->update($modelData);
-                $modelIndex++;
+            // Group file fields by their index
+            $modelGroups = [];
+            foreach ($fileFields as $key => $file) {
+                if (preg_match('/_(\d+)$/', $key, $matches)) {
+                    $index = $matches[1];
+                    if (!isset($modelGroups[$index])) {
+                        $modelGroups[$index] = [];
+                    }
+                    $modelGroups[$index][$key] = $file;
+                }
             }
+            dd($modelGroups);
+            // Process each model group
+            foreach ($modelGroups as $index => $files) {
+                $templateModel = new TemplateModels();
+                $templateModel->template_id = $template->id;
+
+                // Handle image files
+                $imageTypes = ['background_image', 'shadow_image', 'highlight_image', 'preview_image'];
+                foreach ($imageTypes as $imageType) {
+                    $fileKey = "{$imageType}_{$index}";
+                    if (isset($files[$fileKey])) {
+                        $file = $files[$fileKey];
+                        $filePath = $file->store("template/{$template->id}/{$index}", 'public');
+                        $templateModel->$imageType = $filePath;
+                    }
+                }
+
+                // Handle foreground image if needed
+                $foregroundKey = "foreground_image_{$index}";
+                if (isset($files[$foregroundKey])) {
+                    $file = $files[$foregroundKey];
+                    $filePath = $file->store("template/{$template->id}/{$index}", 'public');
+                    $templateModel->foreground_image = $filePath;
+                }
+
+                // Handle additional files dynamically
+                $filePaths = [];
+                foreach ($files as $key => $file) {
+                    if (preg_match('/^file_(\d+)_(\d+)$/', $key, $matches)) {
+                        $filePath = $file->store("template/{$template->id}/{$index}", 'public');
+                        $filePaths[] = $filePath;
+                    }
+                }
+
+                // Store the additional files as a comma-separated list in the model_image field
+                $templateModel->model_image = implode(',', $filePaths);
+                
+                // Save TemplateModel
+                $templateModel->save();
+            }
+
             return redirect()->route('template.index')->with('success', 'Template created successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
     }
 
-    private function storeFile($file, $templateId, $index, $name)
-    {
-        if ($file) {
-            $path = public_path("templates/$templateId/$index");
-
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
-            $timestamp = now()->format('YmdHis');
-            // $filename = $file->getClientOriginalName();
-            $filename = $name."_".$timestamp;
-            $file->move($path, $name."_".$timestamp);
-            return "templates/$templateId/$index/$filename";
-        }
-        return null;
-    }
-
-    private function storeFiles($files, $templateId, $index, $name)
-    {
-        $filePaths = [];
-
-        if ($files) {
-            foreach ($files as $file) {
-                $filePaths[] = $this->storeFile($file, $templateId, $index, $name);
-            }
-        }
-
-        return implode(',', $filePaths);
-    }
-
-
+    /**
+     * Display the specified resource.
+     */
     public function show(string $id)
     {
         //
@@ -140,13 +156,13 @@ class TemplateController extends Controller
     public function edit(string $id)
     {
         $template = Templates::with('templateModels')->findOrFail($id);
-
-        $categories = Category::where('is_deleted', false)->where('parent_id', null)->get();
-        $subCategories = Category::where('parent_id', $template->category_id)->get();
-
+        $templateFiles = $template->templateModels[0]->model_image;
+        dd($template);
+        dd($templateFiles);
+        $categories = Category::all();
         $users = User::all();
 
-        return view('admin.template.edit', compact('template', 'categories', 'users', 'subCategories'));
+        return view('admin.template.edit', compact('template', 'categories', 'users'));
     }
 
     /**
