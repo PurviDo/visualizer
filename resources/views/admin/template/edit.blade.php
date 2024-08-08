@@ -9,7 +9,6 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('template.index') }}">Templates</a></li>
                     <li class="breadcrumb-item active">Edit Template</li>
                 </ol>
             </div>
@@ -76,9 +75,6 @@
                                             <label for="subCategory_id">Sub Category Name <span class="text-danger">*</span></label>
                                             <select name="sub_category_id" class="form-control subCategory_id" id="subcategory" required>
                                                 <option value="">Select Sub Category</option>
-                                                @foreach ($subCategories as $subCategory)
-                                                <option value="{{ $subCategory->id }}" {{ $template->sub_category_id == $subCategory->id ? 'selected' : '' }}>{{ $subCategory->name }}</option>
-                                                @endforeach
                                             </select>
                                             <div class="invalid-feedback font-weight-bold subCategory-id-invalid" role="alert"></div>
                                         </fieldset>
@@ -107,84 +103,35 @@
 
                                 <div class="row">
                                     <div class="col-12">
-                                        <label>Template Models:</label>
+                                        <label>Add Template Models:</label>
                                         <div class="row">
-                                            <table class="table table-borderless col-md-12 dynamicModel custom_form_group">
-                                                <!-- Existing models will be rendered here -->
+                                            <table class="table table-borderless col-md-12 dynamicPersonDetails custom_form_group">
                                                 @foreach ($template->templateModels as $index => $model)
                                                 <tr>
                                                     <td>
                                                         <fieldset class="form-group floating-label-form-group">
-                                                            <label for="background_image_{{ $index }}">Background Imageee</label>
-                                                            <input type="file" name="background_image_{{ $index }}" class="form-control background_image">
+                                                            <label for="background_image_{{ $index }}">Background Image</label>
+                                                            <input type="file" name="background_image[]" class="form-control background_image">
                                                             <div class="invalid-feedback font-weight-bold background_image_{{ $index }}-invalid" role="alert"></div>
-                                                            @if($model->background_image)
-                                                            <!-- <img src="{{ asset($model->background_image) }}" width="100"> -->
-                                                            <a href="{{ asset($model->background_image) }}" target="_blank">View Image</a>
-                                                            @endif
                                                         </fieldset>
                                                     </td>
+                                                    <!-- Repeat for other image fields -->
+                                                    @foreach ($model->files as $i => $file)
                                                     <td>
                                                         <fieldset class="form-group floating-label-form-group">
-                                                            <label for="foreground_image_{{ $index }}">Foreground Image</label>
-                                                            <input type="file" name="foreground_image_{{ $index }}" class="form-control foreground_image">
-                                                            <div class="invalid-feedback font-weight-bold foreground_image_{{ $index }}-invalid" role="alert"></div>
-                                                            @if($model->foreground_image)
-                                                            <!-- <img src="{{ asset($model->foreground_image) }}" width="100"> -->
-                                                            <a href="{{asset($model->foreground_image) }}" target="_blank">View Image</a>
-                                                            @endif
-                                                        </fieldset>
-                                                    </td>
-                                                    <td>
-                                                        <fieldset class="form-group floating-label-form-group">
-                                                            <label for="shadow_image_{{ $index }}">Shadow Image</label>
-                                                            <input type="file" name="shadow_image_{{ $index }}" class="form-control shadow_image">
-                                                            <div class="invalid-feedback font-weight-bold shadow_image_{{ $index }}-invalid" role="alert"></div>
-                                                            @if($model->shadow_image)
-                                                            <!-- <img src="{{ asset($model->shadow_image) }}" width="100"> -->
-                                                            <a href="{{ asset($model->shadow_image) }}" target="_blank">View Image</a>
-                                                            @endif
-                                                        </fieldset>
-                                                    </td>
-                                                    <td>
-                                                        <fieldset class="form-group floating-label-form-group">
-                                                            <label for="highlight_image_{{ $index }}">Highlight Image</label>
-                                                            <input type="file" name="highlight_image_{{ $index }}" class="form-control highlight_image">
-                                                            <div class="invalid-feedback font-weight-bold highlight_image_{{ $index }}-invalid" role="alert"></div>
-                                                            @if($model->highlight_image)
-                                                            <!-- <img src="{{ asset($model->highlight_image) }}" width="100"> -->
-                                                            <a href="{{ asset($model->highlight_image) }}" target="_blank">View Image</a>
-                                                            @endif
-                                                        </fieldset>
-                                                    </td>
-                                                    <td>
-                                                        <fieldset class="form-group floating-label-form-group">
-                                                            <label for="preview_image_{{ $index }}">Preview Image</label>
-                                                            <input type="file" name="preview_image_{{ $index }}" class="form-control preview_image">
-                                                            <div class="invalid-feedback font-weight-bold preview_image_{{ $index }}-invalid" role="alert"></div>
-                                                            @if($model->preview_image)
-                                                            <a href="{{ asset($model->preview_image) }}" target="_blank">View Image</a>
-                                                            @endif
-                                                        </fieldset>
-                                                    </td>
-                                                    @php
-                                                        $modelImagesArray = explode(',', $model->model_image);
-                                                    @endphp
-                                                    @foreach ($modelImagesArray as $fileIndex => $file)
-                                                    <td>
-                                                        <fieldset class="form-group floating-label-form-group">
-                                                            <label for="file_{{ $index }}_{{ $fileIndex }}">File {{ $fileIndex + 1 }}</label>
-                                                            <input type="file" name="file_{{ $index }}[{{ $fileIndex }}]" class="form-control file-input">
-                                                            <div class="invalid-feedback font-weight-bold file_{{ $index }}_{{ $fileIndex }}-invalid" role="alert"></div>
-                                                            @if($file)
-                                                            <a href="{{ asset($file) }}" target="_blank">View File</a>
-                                                            @endif
+                                                            <label for="file_{{ $index }}_{{ $i }}">File {{ $i + 1 }}</label>
+                                                            <input type="file" name="file[]" class="form-control file-input">
+                                                            <div class="invalid-feedback font-weight-bold file_{{ $index }}_{{ $i }}-invalid" role="alert"></div>
                                                         </fieldset>
                                                     </td>
                                                     @endforeach
                                                     <td>
                                                         <div class="form-floating form-floating-outline">
+                                                            @if ($loop->first)
+                                                            <button type="button" name="add" class="btn btn-outline-primary dynamic-pd">+</button>
+                                                            @else
                                                             <button type="button" class="btn btn-outline-danger remove-field">-</button>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -214,7 +161,7 @@
                                         Cancel
                                     </button>
                                     <button type="submit" class="btn btn-info">
-                                        Update
+                                        Save
                                     </button>
                                 </fieldset>
                             </div>
@@ -226,21 +173,19 @@
     </div>
 </section>
 @endsection
-
 @section('script')
 <script src="{{ asset('/adminlte/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
 <script>
-    let countModel = {{ $template->templateModels->count() }};
+    var countModel = {{ $template->templateModels->count() }};
     var noOfFilesUrl = "{{ url('/noOfFiles') }}";
-</script>
-<script src="{{ asset('assets/js/addModel.js') }}"></script>
-<script>
+    
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
         $('.category_id').on('change', function() {
             var categoryId = $(this).val();
 
@@ -253,27 +198,58 @@
                         $.each(data, function(key, value) {
                             $('#subcategory').append('<option value="' + key + '">' + value + '</option>');
                         });
-                        $('#subcategory').val('{{ $template->sub_category_id }}');
+                        $('#subcategory').val('{{ $template->sub_category_id }}').trigger('change');
                     }
                 });
             } else {
                 $('#subcategory').empty().append('<option value="">Select Sub Category</option>');
             }
+        }).val('{{ $template->category_id }}').trigger('change');
+
+        $('#template-form').on('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // handle success (e.g., redirect or show success message)
+                    } else {
+                        // handle validation errors or other issues
+                        $('#alert-container').html(response.errors);
+                    }
+                }
+            });
         });
 
-        $('.custom_user_id').hide();
-        $('.template_type').on('change', function() {
-            var subCategoryId = $(this).val();
-
-            if (subCategoryId == "custom") {
-                $('.custom_user_id').show();
-            } else {
-                $('.custom_user_id').hide();
-            }
+        $(document).on('click', '.remove-field', function() {
+            $(this).closest('tr').remove();
         });
 
-        $('.template_type').trigger('change');
-        // $('#subcategory').trigger('change');
+        $(document).on('click', '.dynamic-pd', function() {
+            countModel++;
+            var html = '<tr>' +
+                        '<td>' +
+                            '<fieldset class="form-group floating-label-form-group">' +
+                                '<label for="background_image_' + countModel + '">Background Image</label>' +
+                                '<input type="file" name="background_image[]" class="form-control background_image">' +
+                                '<div class="invalid-feedback font-weight-bold background_image_' + countModel + '-invalid" role="alert"></div>' +
+                            '</fieldset>' +
+                        '</td>' +
+                        // Repeat for other image fields
+                        '<td>' +
+                            '<div class="form-floating form-floating-outline">' +
+                                '<button type="button" class="btn btn-outline-danger remove-field">-</button>' +
+                            '</div>' +
+                        '</td>' +
+                    '</tr>';
+            $('.dynamicPersonDetails').append(html);
+        });
     });
 </script>
 @endsection
