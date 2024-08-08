@@ -31,7 +31,7 @@ class RegisterApiRequest extends FormRequest
             'phone_number'  => 'required|string|min:9|max:10|nullable|regex:/[0-9]{9}/',
             'email'         => 'required|email|unique:users,email',
             'password'      => 'min:8',
-            'package_id'    => 'required',
+            // 'package_id'    => 'required',
         ];
     }
 

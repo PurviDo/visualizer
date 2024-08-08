@@ -67,7 +67,7 @@
               </li>
               <li class="nav-item">
                 <a href="{{route('inquiry.index')}}" class="nav-link {{ Route::is('inquiry.index') ? 'active' : '' }}">
-                  <i class="nav-icon fas fa-cube"></i>
+                  <i class="nav-icon fas fa-list"></i>
                   <p>
                     Inquiry
                   </p>

@@ -14,14 +14,14 @@ class UserRepository implements UserRepositoryInterface
     public function createUser($request)
     {
         $request['password'] = Hash::make($request['password']);
-        $packages_details = Package::fildOrfail($request->package_id);
+        $packages_details = Package::first();
         $request['purchased_credit'] = $packages_details->credits;
         // $otp = rand(111111, 999999);
         $otp = 111111;
 
         $request['package_id'] = $packages_details->_id;
         $request['user_type'] = 0;
-        $request['is_active'] = 0;        
+        $request['is_active'] = "0";        
         $request['otp'] = $otp;
         $request['deleted_at'] = null; 
         $request['mobile_no'] = $request['phone_number'];

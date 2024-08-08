@@ -14,36 +14,24 @@ class CategorySeeder extends Seeder
         Category::truncate();
         $data = [
             [
-                'name' => 'Martial Arts',
-                'is_deleted' => false,
+                'name' => 'Men',
+                'is_deleted' => 0,
                 'subcategories' => [
-                    ['name' => 'Karate', 'is_deleted' => false],
-                    ['name' => 'Judo', 'is_deleted' => false],
+                    ['name' => 'Shirt', 'is_deleted' => 0],
+                    ['name' => 'Kurta', 'is_deleted' => 0],
                 ]
             ],
             [
-                'name' => 'Fitness',
-                'is_deleted' => false,
+                'name' => 'Women',
+                'is_deleted' => 0,
                 'subcategories' => [
-                    ['name' => 'Weightlifting', 'is_deleted' => false],
-                    ['name' => 'Cardio', 'is_deleted' => false],
+                    ['name' => 'Saree', 'is_deleted' => 0],
+                    ['name' => 'Kurti', 'is_deleted' => 0],
                 ]
             ],
             [
-                'name' => 'Yoga',
-                'is_deleted' => false,
-                'subcategories' => [
-                    ['name' => 'Hatha', 'is_deleted' => false],
-                    ['name' => 'Vinyasa', 'is_deleted' => false],
-                ]
-            ],
-            [
-                'name' => 'Dance',
-                'is_deleted' => false,
-                'subcategories' => [
-                    ['name' => 'Ballet', 'is_deleted' => false],
-                    ['name' => 'Hip-Hop', 'is_deleted' => false],
-                ]
+                'name' => 'Furniture',
+                'is_deleted' => 0
             ]
         ];
 

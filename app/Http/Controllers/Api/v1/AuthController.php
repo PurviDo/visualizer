@@ -51,19 +51,18 @@ class AuthController extends Controller
 
     public function signUp(RegisterApiRequest $request)
     {
-        $data = $this->userRepository->createUser($request->validated());
-
+        $user = $this->userRepository->createUser($request->validated());
         $package = Package::first();
         $startDate = Carbon::now();
         $endDate = $startDate->copy()->addMonths($package->duration);
-        $data['package_id'] = $package->id;
-        $data['user_id'] = $data->id;
+        $data['package_id'] = $user->package_id;
+        $data['user_id'] = $user->id;
         $data['start_date'] = Carbon::now()->format('Y-m-d');
         $data['end_date'] = $endDate->format('Y-m-d');
         UserPackages::create($data);
 
         if ($data) {
-            return $this->sendResponse('User Created successfully.', 1, array($data), $this->successStatus);
+            return $this->sendResponse('User Created successfully.', 1, array($user), $this->successStatus);
         }
         return $this->sendResponse('Something went wrong.', 0, null, $this->failedStatus);
     }
@@ -140,9 +139,9 @@ class AuthController extends Controller
 
                     $this->userRepository->updateUser($request->user_id, ["otp" => null, 'is_active' => '1']);
                 }
-                return $this->sendResponse('Otp verified successfully.', 1, array(["id" => $result->id]), $this->successStatus);
+                return $this->sendResponse('OTP verified successfully.', 1, array(["id" => $result->id]), $this->successStatus);
             } else {
-                return $this->sendResponse('Invalid Otp.', 0, null, $this->failedStatus);
+                return $this->sendResponse('Invalid OTP.', 0, null, $this->failedStatus);
             }
         } else {
             return $this->sendResponse('User not found.', 0, null, $this->notFoundStatus);
