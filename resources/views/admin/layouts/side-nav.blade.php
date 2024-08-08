@@ -73,6 +73,14 @@
                   </p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{route('template.index')}}" class="nav-link {{ Route::is('template.index') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-cube"></i>
+                  <p>
+                    Template
+                  </p>
+                </a>
+              </li>
               <!-- <li class="nav-item">
                 <a href="/template_mg" class="nav-link">
                   <i class="nav-icon fas fa-layer-group"></i>
