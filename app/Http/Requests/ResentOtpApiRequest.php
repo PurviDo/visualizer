@@ -32,7 +32,8 @@ class ResentOtpApiRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        $response = response()->json(['error' => $validator->errors(), "message" => null, "status" => false, "data" => null], 422);
+        $error = $validator->errors()->toArray();
+        $response = response()->json(['error' => $validator->errors(), "message" => current($error)[0], "status" => 422, "data" => null], 422);
         throw new ValidationException($validator, $response);
     }
 }
