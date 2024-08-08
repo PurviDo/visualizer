@@ -26,8 +26,8 @@ class ChangePasswordApiRequest extends FormRequest
     public function rules()
     {
         return [
-            'current_password'      => 'min:6|required',
-            'password'              => 'min:6|required|confirmed',
+            'current_password'      => 'min:8|required',
+            'password'              => 'min:8|required|confirmed',
         ];
     }
 

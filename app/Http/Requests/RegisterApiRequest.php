@@ -28,7 +28,7 @@ class RegisterApiRequest extends FormRequest
         return [
             'first_name'    => 'required|max:100',
             'last_name'     => 'required|max:100',
-            'phone_number'  => 'required|string|min:9|max:10|nullable|regex:/[0-9]{9}/',
+            'phone_number'  => 'required|string|min:9|max:10|unique:users,mobile_no|nullable|regex:/[0-9]{9}/',
             'email'         => 'required|email|unique:users,email',
             'password'      => 'min:8',
             // 'package_id'    => 'required',
