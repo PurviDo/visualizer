@@ -105,7 +105,7 @@
                                     <div class="col-12">
                                         <label>Add Temple Models:</label>
                                         <div class="row">
-                                            <table class="table table-borderless col-md-12 dynamicPersonDetails custom_form_group">
+                                            <table class="table table-borderless col-md-12 dynamicModel custom_form_group">
 
                                             </table>
                                         </div>
@@ -148,7 +148,7 @@
 @section('script')
 <script src="{{ asset('/adminlte/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
 <script>
-    var countModel = 0;
+    let countModel = 0;
     var noOfFilesUrl = "{{ url('/noOfFiles') }}";
 </script>
 <script src="{{asset('assets/js/addModel.js')}}"></script>

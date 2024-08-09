@@ -21,12 +21,12 @@ class TemplateController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $subCategory = Templates::all();
+            $subCategory = Templates::with(['category', 'subCategory'])->get();
             return DataTables::of($subCategory)
                 ->addIndexColumn()
                 ->editColumn('action', function ($row) {
-                    $btn = '<button class="btn btn-sm btn-warning btn-round tooltip-toggle edit-sub-category" data-action="' . route('sub-category.show', $row->id) . '" data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
-                    $btn .= ' <button class="btn btn-sm btn-danger btn-round tooltip-toggle delete-sub-category" data-original-title="Delete" data-action="' . route('sub-category.destroy', $row->id) . '"><i class="nav-icon fas fa-trash"></i></button>';
+                    $btn = '<a href="' . route('template.edit', $row->id) . '" class="btn btn-sm btn-warning btn-round tooltip-toggle edit-template"><i class="nav-icon fas fa-edit"></i></a>';
+                    $btn .= ' <button class="btn btn-sm btn-danger btn-round tooltip-toggle delete-template" data-original-title="Delete" data-action="' . route('template.destroy', $row->id) . '"><i class="nav-icon fas fa-trash"></i></button>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -52,7 +52,6 @@ class TemplateController extends Controller
      */
     public function store(Request $request)
     {
-
         // dd($request->all());
         // Validate the request
         $validator = Validator::make($request->all(), [
@@ -62,46 +61,36 @@ class TemplateController extends Controller
             'sub_category_id' => 'required|exists:categories,_id',
             'description' => 'nullable|string',
             'instructions' => 'nullable|string',
+            'user_id' => 'nullable|exists:users,id', // Validate user_id if necessary
         ]);
 
         if ($validator->fails()) {
-            // dd($validator->fails());        
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
         try {
+            // Prepare data for creating the Template record
             $data = $request->all();
             $data['status'] = 1;
             $template = Templates::create($data);
 
-            // Handle predefined file types
-            $fileTypes = ['background_image', 'foreground_image', 'shadow_image', 'highlight_image', 'preview_image'];
-            foreach ($fileTypes as $type) {
-                $inputName = "{$type}_1"; // Assuming _1 is the index for these files
-                if ($request->hasFile($inputName)) {
-                    $path = $this->handleFileUpload($request->file($inputName), $template->id, $type, 1);
+            $templateId = $template->id;
 
-                    TemplateModels::create([
-                        'template_id' => $template->id,
-                        "{$type}_image" => $path
-                    ]);
-                }
-            }
+            // Handle dynamic rows for template models
+            $modelIndex = 0;
+            while ($request->has("background_image_$modelIndex")) {
 
-            // Handle additional dynamic files
-            $fileCount = $request->input('no_of_files', 0);
-            for ($i = 0; $i < $fileCount; $i++) {
-                foreach ($fileTypes as $type) {
-                    $inputName = "{$type}_{$i}";
-                    if ($request->hasFile($inputName)) {
-                        $path = $this->handleFileUpload($request->file($inputName), $template->id, $type, $i);
-
-                        TemplateModels::create([
-                            'template_id' => $template->id,
-                            "{$type}_image" => $path
-                        ]);
-                    }
-                }
+                $templateModel = TemplateModels::create(['template_id' => $templateId]);
+                $modelData = [
+                    'background_image' => $this->storeFile($request->file("background_image_$modelIndex"), $templateId, $templateModel->id,'background_image'),
+                    'foreground_image' => $this->storeFile($request->file("foreground_image_$modelIndex"), $templateId, $templateModel->id,'foreground_image'),
+                    'shadow_image' => $this->storeFile($request->file("shadow_image_$modelIndex"), $templateId, $templateModel->id,'shadow_image'),
+                    'highlight_image' => $this->storeFile($request->file("highlight_image_$modelIndex"), $templateId, $templateModel->id,'highlight_image'),
+                    'preview_image' => $this->storeFile($request->file("preview_image_$modelIndex"), $templateId, $templateModel->id,'preview_image'),
+                    'model_image' => $this->storeFiles($request->file("file_$modelIndex"), $templateId, $templateModel->id,'model_image'),
+                ];
+                $templateModel->update($modelData);
+                $modelIndex++;
             }
             return redirect()->route('template.index')->with('success', 'Template created successfully!');
         } catch (\Exception $e) {
@@ -109,22 +98,37 @@ class TemplateController extends Controller
         }
     }
 
-    function handleFileUpload($file, $templateId, $type, $index)
+    private function storeFile($file, $templateId, $index, $name)
     {
-        $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $sanitizedFileName = Str::slug($fileName, '_');
-        $timestamp = Carbon::now()->timestamp;
-        $folderPath = "template/template_{$sanitizedFileName}";
-        $filename = "{$type}_{$templateId}_{$timestamp}_{$index}.{$file->getClientOriginalExtension()}";
-        $path = $file->storeAs($folderPath, $filename, 'public');
+        if ($file) {
+            $path = public_path("templates/$templateId/$index");
 
-        return $path;
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            $timestamp = now()->format('YmdHis');
+            // $filename = $file->getClientOriginalName();
+            $filename = $name."_".$timestamp;
+            $file->move($path, $name."_".$timestamp);
+            return "templates/$templateId/$index/$filename";
+        }
+        return null;
+    }
+
+    private function storeFiles($files, $templateId, $index, $name)
+    {
+        $filePaths = [];
+
+        if ($files) {
+            foreach ($files as $file) {
+                $filePaths[] = $this->storeFile($file, $templateId, $index, $name);
+            }
+        }
+
+        return implode(',', $filePaths);
     }
 
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
@@ -135,7 +139,14 @@ class TemplateController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $template = Templates::with('templateModels')->findOrFail($id);
+
+        $categories = Category::where('is_deleted', false)->where('parent_id', null)->get();
+        $subCategories = Category::where('parent_id', $template->category_id)->get();
+
+        $users = User::all();
+
+        return view('admin.template.edit', compact('template', 'categories', 'users', 'subCategories'));
     }
 
     /**
@@ -149,9 +160,14 @@ class TemplateController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Templates $template)
     {
-        //
+        $template->delete();
+        return response()->json([
+            'success' => true,
+            'message' => "Template has been deleted successfully",
+            'data' => [],
+        ]);
     }
 
     public function getSubCategories($categoryId)

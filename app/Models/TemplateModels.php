@@ -3,8 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use SebastianBergmann\Template\Template;
+use MongoDB\Laravel\Eloquent\Model;
 
 class TemplateModels extends Model
 {
@@ -21,6 +20,6 @@ class TemplateModels extends Model
 
     public function template()
     {
-        return $this->belongsTo(Template::class);
+        return $this->belongsTo(Templates::class,'template_id');
     }
 }
