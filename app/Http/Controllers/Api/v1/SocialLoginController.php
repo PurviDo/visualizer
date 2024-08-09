@@ -76,7 +76,6 @@ class SocialLoginController extends Controller
                 $nameParts = $this->splitName($providerUser->getName());
                 $firstName = $nameParts['first_name'];
                 $lastName = $nameParts['last_name'];
-                $otp = 111111;
 
                 $packages_details = Package::first();
 
@@ -87,7 +86,7 @@ class SocialLoginController extends Controller
                     'is_active' => "1",
                     'user_type' => 0,
                     'mobile_no' => null,
-                    'otp' => $otp,
+                    'otp' => null,
                     'deleted_at' => null,
                     'purchased_credit' => $packages_details->credits,
                     'package_id' => $packages_details->_id,
