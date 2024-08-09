@@ -18,7 +18,7 @@ class ContactUsController extends Controller
                 ->addIndexColumn()
                 ->editColumn('action', function ($row) {
                     $btn = '<button class="btn btn-sm btn-warning btn-round tooltip-toggle edit-contact-us" data-action="' . route('contact-us.show', $row->id) . '" data-original-title="Edit"><i class="nav-icon fas fa-edit"></i></button>';
-                    $btn .= ' <button class="btn btn-sm btn-danger btn-round tooltip-toggle delete-contact-us" data-original-title="Delete" data-action="' . route('contact-us.destroy', $row->id) . '"><i class="nav-icon fas fa-trash"></i></button>';
+                    //$btn .= ' <button class="btn btn-sm btn-danger btn-round tooltip-toggle delete-contact-us" data-original-title="Delete" data-action="' . route('contact-us.destroy', $row->id) . '"><i class="nav-icon fas fa-trash"></i></button>';
                     return $btn;
                 })
                 ->rawColumns(['action'])

@@ -21,9 +21,9 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-end align-items-center">
+                    <!-- <div class="card-header d-flex justify-content-end align-items-center">
                         <button type="button" class="btn btn-info add-contact-us">Add New Contact Us</button>
-                    </div>
+                    </div> -->
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="data-table" class="table table-bordered table-striped" width="100%">
@@ -121,8 +121,8 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
+                    // orderable: false,
+                    // searchable: false
                 },
                 {
                     data: 'title',
@@ -190,6 +190,7 @@
             }
         });
     });
+    
     $(document).on('click', '.delete-contact-us,.restore-contact-us', function() {
         var message;
         url = $(this).data('action');
@@ -282,6 +283,7 @@
 
     function refresh_datatable(response) {
         $('#data-table').DataTable().ajax.reload(null, false);
+        $("th.sorting_disabled").removeClass(".sorting_asc");
     }
 </script>
 @endsection

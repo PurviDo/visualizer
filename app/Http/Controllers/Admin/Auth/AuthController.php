@@ -43,7 +43,7 @@ class AuthController extends Controller
                 ->withSuccess('You have Successfully loggedin');
         }
 
-        return redirect("/")->with('message','Oppes! You have entered invalid credentials');
+        return redirect("/login")->with('message','Oppes! You have entered invalid credentials');
     }
 
     public function logout(): RedirectResponse
@@ -51,7 +51,7 @@ class AuthController extends Controller
         Session::flush();
         Auth::logout();
 
-        return Redirect('/');
+        return Redirect('/login');
     }
     
     public function showProfile() : View
